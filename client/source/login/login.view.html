@@ -1,0 +1,71 @@
+<style type="text/css">
+    body {
+      background-color: #DADADA;
+      background-image: url(high-school.png);
+      background-position: center;
+      background-size: cover;
+
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+  </style>
+
+<br><Br><Br><br><Br><Br>
+<br><Br><Br>
+
+
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+
+    <form class="ui large form">
+      <div class="ui stacked segment">
+
+        <h2 class="ui blue image header">
+      <div class="content">
+        Sign in
+      </div>
+    </h2>
+
+      <div class="field">
+          <div class="ui left icon input">
+            <i class="key icon"></i>
+            <input type="text" name="text" placeholder="Single Sign-on Code">
+          </div>
+        </div>
+
+
+  <div class="ui horizontal divider">
+    Or
+  </div>
+
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" name="email" placeholder="E-mail address">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <div class="ui fluid large blue submit button" ui-sref="home">Login</div>
+      </div>
+
+      <div class="ui error message"></div>
+
+    </form>
+
+    <div class="ui message">
+      New to us? <a href="#">Sign Up</a>
+    </div>
+  </div>
+</div>

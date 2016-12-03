@@ -2,7 +2,8 @@
 
 // Declare app level module which depends on views, and components
 angular.module('app', [
-  'ui.router'
+  'ui.router',
+  'ngAnimate'
 ]).config(function($stateProvider, $urlRouterProvider) {
 
 
@@ -49,13 +50,33 @@ angular.module('app', [
       parent: navigation
     })
 
+    .state('login',{
+      url: "/login",
+      templateUrl: "login/login"
+          })
+
 
 
     ;
 
 
 
-  }).controller('rootController', function($scope){
+  })
+
+
+.run(function($rootScope, $animate){
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+
+         //below are routes where animation is off
+        if(toState.name=='login' || fromState.name=='login')
+            $animate.enabled(false);            
+        else
+            $animate.enabled(true);
+
+    });
+ })
+
+.controller('rootController', function($scope){
 
 
 

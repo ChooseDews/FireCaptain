@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 
   var libraryFiles = [
     'bower_components/angular/angular.min.js',
-  //  'bower_components/angular-animate/angular-animate.min.js',
+    'bower_components/angular-animate/angular-animate.min.js',
 //    'bower_components/angular-touch/angular-touch.min.js',
   //  'bower_components/tg-angular-validator/dist/angular-validator.min.js',
   //  'bower_components/ng-fastclick/dist/index.min.js',
