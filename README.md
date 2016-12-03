@@ -3,7 +3,7 @@
   <img src="https://i.imgur.com/oUO93jC.png" width="300px" alt="Sublime's custom image"/>
 </p>
 
-<h1 align="center"><b>Fire Captin</b></h1>
+<h1 align="center"><b>Fire Captain</b></h1>
 
 
 
