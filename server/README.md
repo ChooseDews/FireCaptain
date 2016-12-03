@@ -1,4 +1,4 @@
-## Fire Captin Sever
+## Fire Captain Sever
 
 This repo contains the domain logic and api. The entry point is located at ````bin/www```` however the main tieing logic is within ````app.js````. Run ````npm start```` or ````nodemon```` to get everything running.
 
