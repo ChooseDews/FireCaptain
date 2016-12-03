@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+var urlPath = '/api/me';
+module.exports = function (app, router, services) {
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
-module.exports = router;
+   router.get('/', function(req,res){
+      res.send('hello');
+  });
+
+
+
+
+
+  app.use(urlPath, router);
+};
