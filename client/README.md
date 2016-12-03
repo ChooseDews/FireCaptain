@@ -1,20 +1,16 @@
-# firecaptain-react
+## Client
+To install client dependencies go to the client folder and run:
 
-This is a react express starter app.
-
-**commands:**
+    npm install
+To start the production server run:
 
     npm start
-This starts the production server.
+Other available commands:
 
-    npm run dev
-This starts the development server.
-
-	npm run clean
-This deletes the compiled files in dist.
-
-	npm run build
-This builds the files and puts the into dist.
-
-	npm run prod
-This starts the production server without building or cleaning.
+| Command       | Function                                                  |
+|---------------|-----------------------------------------------------------|
+| npm start     | Starts the production server.                             |
+| npm run dev   | Starts the development server.                            |
+| npm run prod  | Starts the production server without cleaning or building |
+| npm run clean | Deletes all the compiled webpack files.                   |
+| npm run build | Builds the compiled javascript and html files.            |
