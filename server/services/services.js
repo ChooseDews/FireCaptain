@@ -12,7 +12,7 @@ var services = {};
 
 logger.art('Services');
 for (var service of files) {
-  var name = service.split('/');
+  var name = service.replace(/\\/g,'/').split('/');
   name = name[name.length - 1].replace('.js', '');
   logger.info("Loading Service ------------ "+service);
   if (name != 'services') services[name] = require(service)(db, logger, config, {});
