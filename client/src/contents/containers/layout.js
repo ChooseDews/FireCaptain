@@ -1,10 +1,19 @@
 import React from 'react';
+import { RouteTransition } from 'react-router-transition';
 
 export default class Layout extends React.Component {
 	render() {
 		return (
 			<div>
-				{this.props.children}
+				<RouteTransition
+				  pathname={this.props.location.pathname}
+				  atEnter={{ translateX: 100 }}
+				  atLeave={{ translateX: -100 }}
+				  atActive={{ translateX: 0 }}
+				  mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
+				>
+				  {this.props.children}
+				</RouteTransition>
 			</div>
 		) 
 	}
