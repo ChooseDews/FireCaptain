@@ -1,7 +1,7 @@
 import {
 	ADD_INITIAL_TEACHERS,
 	REMOVE_TEACHERS
-} from "../constants/constants"
+} from "../constants"
 
 const teachersReducer = (state = [], action) => {
 	switch(action.type) {

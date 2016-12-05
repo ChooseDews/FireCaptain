@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux"
 import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 
-import * as actions from "../../actions/actions"
+import { getTeachers } from "../actions"
 
 class HiddenHome extends React.Component {
 	componentDidMount() {
@@ -46,7 +46,7 @@ const Home = connect(
 	(dispatch) => {
 		return {
 			updateTeachers: () => {
-				dispatch(actions.updateTeachers())
+				dispatch(getTeachers())
 			}
 		}
 	}

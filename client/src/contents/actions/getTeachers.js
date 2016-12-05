@@ -1,14 +1,10 @@
-import { ADD_INITIAL_TEACHERS } from "../constants/constants"
+import { ADD_INITIAL_TEACHERS } from "../constants"
 
 import * as axios from "axios"
 
-function getTeachers() {
-	return axios.get("https://jsonplaceholder.typicode.com/users")
-}
-
-export function updateTeachers() {
+export default function getTeachers() {
 	return function(dispatch) {
-		return getTeachers().then(
+		return axios.get("https://jsonplaceholder.typicode.com/users").then(
 			(data) => {
 				console.log(data)
 				dispatch({

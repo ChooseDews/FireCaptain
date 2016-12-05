@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import Layout from './containers/layout';
-import Home from './pages/home/index';
+import { Layout } from './containers';
+import { Home } from './pages';
 
 
 const routes = (
