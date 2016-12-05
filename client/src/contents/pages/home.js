@@ -1,16 +1,30 @@
 import React from "react";
 import { connect } from "react-redux"
-import { Icon, Label, Menu, Table } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Button } from 'semantic-ui-react'
 
-import { getTeachers } from "../actions"
+import { teacherActions } from "../actions"
 
 class HiddenHome extends React.Component {
 	componentDidMount() {
-		this.props.updateTeachers()
+		this.props.getTeachers()
 	}
 	render() {
 		return (
-			<div>
+			<div style={{paddingTop: "10px"}}>
+				<Button color='red' onClick={() => {
+					this.props.removeTeachers()
+				}}>
+					Remove all teachers
+				</Button>
+
+				<Button onClick={() => {
+			    	this.props.addTeacher({
+			    		id: 5,
+			    		name: "riley",
+			    		email: "riley@gmail.com"
+			    	})
+			    }}>Add New Teacher</Button>
+
 				<Table celled>
 			      <Table.Header>
 			        <Table.Row>
@@ -24,9 +38,19 @@ class HiddenHome extends React.Component {
 			      	{this.props.teachers.map((teacher) => {
 			      		return (
 			      			<Table.Row>
-					          <Table.Cell>{teacher.id}</Table.Cell>
-					          <Table.Cell>{teacher.name}</Table.Cell>
-					          <Table.Cell>{teacher.email}</Table.Cell>
+			      			  <Table.Cell>
+			      			  	<Button animated='vertical' color='red' onClick={() => {
+			      			  		this.props.removeTeacher(teacher.get('id'))
+			      			  	}}>
+							      <Button.Content hidden>Delete</Button.Content>
+							      <Button.Content visible>
+							        <Icon name='trash' />
+							      </Button.Content>
+							    </Button>
+			      			  </Table.Cell>
+					          <Table.Cell>{teacher.get('id')}</Table.Cell>
+					          <Table.Cell>{teacher.get('name')}</Table.Cell>
+					          <Table.Cell>{teacher.get('email')}</Table.Cell>
 					        </Table.Row>
 			      			)
 			      	})}
@@ -45,8 +69,17 @@ const Home = connect(
 	},
 	(dispatch) => {
 		return {
-			updateTeachers: () => {
-				dispatch(getTeachers())
+			getTeachers: () => {
+				dispatch(teacherActions.getTeachers())
+			},
+			addTeacher: (teacher) => {
+				dispatch(teacherActions.addTeacher(teacher))
+			},
+			removeTeacher: (id) => {
+				dispatch(teacherActions.removeTeacher(id))
+			},
+			removeTeachers: () => {
+				dispatch(teacherActions.removeTeachers())
 			}
 		}
 	}

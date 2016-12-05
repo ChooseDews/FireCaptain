@@ -1,1 +1,1 @@
-export {default as getTeachers} from "./getTeachers"
+export {default as teacherActions} from "./teachers"
