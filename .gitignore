@@ -14,9 +14,10 @@ $RECYCLE.BIN/
 *.msm
 *.msp
 
-server/node_modules/*
-client/bower_components/*
-client/node_modules/*
+
+bower_components/
+node_modules/
+client/dist
 
 # Windows shortcuts
 *.lnk

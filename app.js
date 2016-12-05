@@ -4,8 +4,7 @@ var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-
+var clientRuntime = require('./client/runtime.js');
 var logger = require('./bin/logger');
 var db = require('./db/db');
 var services = require('./services/services');
@@ -25,9 +24,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+//Pull all our routes in
 routes(app, services);
-app.use('/', express.static(path.join(__dirname, '/../client/dist')));
+
+
+
+//Get webpack and everything loaded up.
+clientRuntime(app, express, process.argv[2]);
 
 
 

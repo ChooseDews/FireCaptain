@@ -16,7 +16,7 @@ module.exports = _.extend({}, config, {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: path.join(__dirname, '../src/index.html'),
       inject: 'body',
       filename: 'index.html',
       minify: {
