@@ -7,7 +7,7 @@
     "prod": "node ./bin/www prod",
     "build": "set NODE_ENV=production && webpack --config client/webpack/webpack.config.prod.js --progress --profile --colors",
     "clean": "rm -rf client/dist",
-    "start": "npm run clean && npm run build && npm run prod"
+    "start": "npm run dev"
   },
   "description": "Providing Fire Drills to the modern school",
   "contributors": [
