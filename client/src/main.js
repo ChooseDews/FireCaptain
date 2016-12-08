@@ -4,14 +4,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from "react-redux"
+import { Socket } from 'react-socket-io';
 
 import routes from './contents/routes';
 import store from "./contents/store";
 
+const uri = 'http://localhost:3000'; //sample url
+
 ReactDOM.render((
 	<Provider store={store}>
-		<Router history={browserHistory}>
-			{routes}
-		</Router>
+		<Socket uri={uri}>
+			<Router history={browserHistory}>
+				{routes}
+			</Router>
+		</Socket>
   </Provider>
 ), document.getElementById('app'));
