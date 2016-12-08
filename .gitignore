@@ -18,6 +18,7 @@ $RECYCLE.BIN/
 bower_components/
 node_modules/
 client/dist
+npm-debug.log
 
 # Windows shortcuts
 *.lnk
