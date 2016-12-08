@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux"
+import { Link } from "react-router"
 import { Icon, Label, Menu, Table, Button } from 'semantic-ui-react'
 
 import { teacherActions } from "../actions"
@@ -10,7 +11,8 @@ class HiddenHome extends React.Component {
 	}
 	render() {
 		return (
-			<div style={{paddingTop: "10px"}}>
+			<div>
+				<Link to={"/about"}>About</Link>
 				<Button color='red' onClick={() => {
 					this.props.removeTeachers()
 				}}>

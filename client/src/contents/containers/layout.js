@@ -12,7 +12,9 @@ export default class Layout extends React.Component {
 				  atActive={{ translateX: 0 }}
 				  mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
 				>
-				  {this.props.children}
+				  <div style={{"position": "absolute"}}>
+				  	{this.props.children}
+				  </div>
 				</RouteTransition>
 			</div>
 		) 
