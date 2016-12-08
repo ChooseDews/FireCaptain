@@ -7,7 +7,7 @@
     "prod": "node ./bin/www prod",
     "build": "set NODE_ENV=production && webpack --config client/webpack/webpack.config.prod.js --progress --profile --colors",
     "clean": "rm -rf client/dist",
-    "start": "npm run clean && npm run build && npm run prod"
+    "start": "npm run dev"
   },
   "description": "Providing Fire Drills to the modern school",
   "contributors": [
@@ -38,12 +38,14 @@
     "react-router-transition": "0.0.6",
     "react-socket-io": "^0.2.4",
     "recursive-readdir-sync": "^1.0.6",
+    "redis": "^2.6.3",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "renderkid": "^2.0.0",
     "semantic-ui-react": "^0.61.10",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.7.1",
+    "socket.io-redis": "^2.0.1",
     "webpack": "^1.14.0"
   },
   "devDependencies": {

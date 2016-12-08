@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var logger = require('./../bin/logger');
+var config = require('./../bin/config');
 
 var exports = {};
-mongoose.connect('mongodb://test:test@ds159767.mlab.com:59767/firecaptin');
+mongoose.connect(config.mongooseUrl);
 mongoose.Promise = Promise;
 
 

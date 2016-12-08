@@ -10,10 +10,17 @@ var db = require('./db/db');
 var services = require('./services/services');
 var routes = require('./routes/routes');
 var sockets = require('./socketRoutes/routes.js');
+var config = require('./bin/config.js');
 var http = require('http');
 var app = express();
 var server = http.createServer(app);
+
 var io = require('socket.io')(server);
+var redis = require('redis').createClient;
+var adapter = require('socket.io-redis');
+var pub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password });
+var sub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password });
+io.adapter(adapter({ pubClient: pub, subClient: sub }));
 
 
 // view engine setup
@@ -33,8 +40,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 routes(app, services);
 
 sockets(io, services);
-
-
 
 
 //Get webpack and everything loaded up.
