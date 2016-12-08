@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router"
-import { Icon, Label, Menu, Table, Button } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Button, Checkbox } from 'semantic-ui-react'
+import FlipMove from 'react-flip-move';
 
 import { teacherActions } from "../actions"
 
@@ -27,36 +28,24 @@ class HiddenHome extends React.Component {
 			    	})
 			    }}>Add New Teacher</Button>
 
-				<Table celled>
-			      <Table.Header>
-			        <Table.Row>
-			          <Table.HeaderCell>Delete</Table.HeaderCell>
-			          <Table.HeaderCell>Name</Table.HeaderCell>
-			          <Table.HeaderCell>Email</Table.HeaderCell>
-			        </Table.Row>
-			      </Table.Header>
-
-			      <Table.Body>
-			      	{this.props.teachers.map((teacher, i) => {
+			      <FlipMove easing="cubic-bezier(0, 0.7, 0.8, 0.1)" className="ui middle aligned divided list massive">
+				  {this.props.teachers.map((teacher, i) => {
 			      		return (
-			      			<Table.Row key={i}>
-			      			  <Table.Cell>
-			      			  	<Button animated='vertical' color='red' onClick={() => {
-			      			  		this.props.removeTeacher(teacher.get('id'))
-			      			  	}}>
-							      <Button.Content hidden>Delete</Button.Content>
-							      <Button.Content visible>
-							        <Icon name='trash' />
-							      </Button.Content>
-							    </Button>
-			      			  </Table.Cell>
-					          <Table.Cell>{teacher.get('name')}</Table.Cell>
-					          <Table.Cell>{teacher.get('email')}</Table.Cell>
-					        </Table.Row>
+			      			<div className="item" key={i}>
+							    <div className="right floated content">
+							      <Checkbox toggle onChange={(e, result) => {
+							      	console.log(teacher.get("id"), result.checked)
+							      	this.props.removeTeacher(teacher.get('id'))
+							      }} />
+							    </div>
+							    <div className="content">
+							      {teacher.get('name')}
+							    </div>
+							</div>
 			      			)
 			      	})}
-			      </Table.Body>
-			    </Table>
+				  </FlipMove>
+
 			</div>
 			)
 	}
