@@ -28,16 +28,16 @@ class HiddenHome extends React.Component {
 				<Table celled>
 			      <Table.Header>
 			        <Table.Row>
-			          <Table.HeaderCell>ID</Table.HeaderCell>
+			          <Table.HeaderCell>Delete</Table.HeaderCell>
 			          <Table.HeaderCell>Name</Table.HeaderCell>
 			          <Table.HeaderCell>Email</Table.HeaderCell>
 			        </Table.Row>
 			      </Table.Header>
 
 			      <Table.Body>
-			      	{this.props.teachers.map((teacher) => {
+			      	{this.props.teachers.map((teacher, i) => {
 			      		return (
-			      			<Table.Row>
+			      			<Table.Row key={i}>
 			      			  <Table.Cell>
 			      			  	<Button animated='vertical' color='red' onClick={() => {
 			      			  		this.props.removeTeacher(teacher.get('id'))
@@ -48,7 +48,6 @@ class HiddenHome extends React.Component {
 							      </Button.Content>
 							    </Button>
 			      			  </Table.Cell>
-					          <Table.Cell>{teacher.get('id')}</Table.Cell>
 					          <Table.Cell>{teacher.get('name')}</Table.Cell>
 					          <Table.Cell>{teacher.get('email')}</Table.Cell>
 					        </Table.Row>
