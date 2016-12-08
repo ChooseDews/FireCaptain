@@ -9,7 +9,12 @@ var logger = require('./bin/logger');
 var db = require('./db/db');
 var services = require('./services/services');
 var routes = require('./routes/routes');
+var sockets = require('./webSocket/webSockets.js');
+var http = require('http');
 var app = express();
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +31,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Pull all our routes in
 routes(app, services);
+
+sockets(io, services);
+
 
 
 
@@ -56,4 +64,4 @@ app.use(function(err, req, res, next) {
 logger.art('Ready Dude!');
 
 
-module.exports = app;
+module.exports = server;
