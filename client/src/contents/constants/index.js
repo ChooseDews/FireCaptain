@@ -1,0 +1,4 @@
+export const ADD_TEACHERS = "ADD_TEACHERS"
+export const REMOVE_TEACHERS = "REMOVE_TEACHERS"
+export const ADD_TEACHER = "ADD_TEACHER"
+export const REMOVE_TEACHER = "REMOVE_TEACHER"
