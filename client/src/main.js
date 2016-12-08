@@ -9,7 +9,7 @@ import { Socket } from 'react-socket-io';
 import routes from './contents/routes';
 import store from "./contents/store";
 
-const uri = 'http://localhost:3000/socket.io'; //sample url
+const uri = 'http://localhost:3000'; //sample url
 
 ReactDOM.render((
 	<Provider store={store}>
