@@ -8,9 +8,12 @@ module.exports = function (app, router, services) {
     res.render('index', { title: 'Authentication API' });
   });
 
-	router.get('/login', function(req, res, next) {
+	router.post('/login', function(req, res, next) {
 
 		//handle login
+
+		var username = req.body.username;
+		var password = req.body.password;
 
 
   });
@@ -18,7 +21,6 @@ module.exports = function (app, router, services) {
 	router.get('/logout', function(req, res, next) {
 
 			//handle logout
-
 	});
 
 
