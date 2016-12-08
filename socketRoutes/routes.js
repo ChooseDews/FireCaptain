@@ -5,7 +5,7 @@ var express = require('express');
 module.exports = function(io, services) {
 	services.logger.art('Sockets');
   for (var route of files) {
-    if (route.indexOf('webSockets.js') == -1) {
+    if (route.indexOf('routes.js') == -1) {
       services.logger.info("Loading Socket -------------- "+route);
       require(route)(io, services);
     }
