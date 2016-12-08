@@ -46,6 +46,15 @@ var auth = function(db, logger, config, exports) {
 			});
 		};
 
+    exports.authenticateUser = function(email, password){
+      db.Users.findOne({email: email}).then(function(user){
+        if(user.password == password) return user;
+        if(user.password != password) throw "Invalid Password";
+      }).catch(function(user){
+        throw "User Not Found";
+      })
+    }
+
 
 
 
