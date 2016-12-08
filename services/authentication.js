@@ -6,7 +6,7 @@ var auth = function(db, logger, config, exports) {
 
     exports.signToken = function(payload) {
         return jwt.sign(payload, config.jwtSecret, {
-            expiresIn: 1 // expires in 24 hours
+            expiresIn: 60*60*24*2 // expires in 48 hours
         });
     };
 
