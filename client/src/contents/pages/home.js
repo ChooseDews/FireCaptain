@@ -35,7 +35,6 @@ class HiddenHome extends React.Component {
 							    <div className="right floated content">
 							      <Checkbox toggle onChange={(e, result) => {
 							      	console.log(teacher.get("id"), result.checked)
-							      	this.props.removeTeacher(teacher.get('id'))
 							      }} />
 							    </div>
 							    <div className="content">

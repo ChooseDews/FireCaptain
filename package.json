@@ -37,6 +37,7 @@
     "react-flip-move": "^2.7.2",
     "react-redux": "^4.4.6",
     "react-router": "^2.0.0",
+    "react-router-redux": "^4.0.7",
     "react-router-transition": "0.0.6",
     "react-socket-io": "^0.2.4",
     "recursive-readdir-sync": "^1.0.6",

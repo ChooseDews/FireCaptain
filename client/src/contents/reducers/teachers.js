@@ -9,7 +9,7 @@ import {
 
 const initialState = List([])
 
-const teachersReducer = (state = [], action) => {
+const teachers = (state = [], action) => {
 	switch(action.type) {
 		case ADD_TEACHERS: {
 			return fromJS(action.teachers)
@@ -35,4 +35,4 @@ const teachersReducer = (state = [], action) => {
 	}
 }
 
-export default teachersReducer
+export default teachers
