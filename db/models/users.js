@@ -1,3 +1,5 @@
+var bcrypt = require('bcrypt-nodejs');
+
 module.exports = function(mongoose) {
     var model = {};
     var Schema = mongoose.Schema;
@@ -12,22 +14,58 @@ module.exports = function(mongoose) {
             type: Schema.Types.ObjectId,
             ref: 'Schools'
         },
-        zone: String,
+        drill: {
+            type: Schema.Types.ObjectId,
+            ref: 'Drills'
+        },
         permission: {
-            drill: Boolean,
-            manage: Boolean,
-            admin: Boolean,
-            sudo: Boolean
+            sudo: Boolean,
+            district: Boolean,
+            school: Boolean,
+            drill: Boolean
         },
         name: {
             first: String,
             last: String
         },
-        username: String,
+        email: {
+            type: String,
+            unique: true
+        },
         password: String,
-        sss: String,
+        sss: {
+            type: String,
+            unique: true
+        },
         expire: Date
     });
+
+    model.schema.methods.generateHash = function(password) {
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    };
+
+    // checking if password is valid
+    model.schema.methods.validPassword = function(password) {
+        if(!password) return false;
+        return bcrypt.compareSync(password, this.password);
+    };
+
+    model.schema.statics.create = function(firstName, lastName, email, password, district, school, drill) {
+        var user = new this({
+            name: {
+                first: firstName,
+                last: lastName
+            },
+            district: district,
+            school: school,
+            email: email.toLowerCase()
+        });
+
+        if (drill) user.drill = drill;
+        user.password = user.generateHash(password);
+        return user.save();
+    };
+
 
     return model;
 };

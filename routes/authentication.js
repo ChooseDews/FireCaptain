@@ -2,6 +2,7 @@ var urlPath = '/api/auth';
 module.exports = function (app, router, services) {
 
 	var authentication = services.authentication;
+	var payload = services.payload;
 
   /* GET home page. */
   router.get('/', function(req, res, next) {
@@ -9,13 +10,15 @@ module.exports = function (app, router, services) {
   });
 
 	router.post('/login', function(req, res, next) {
-
-		//handle login
-
-		var username = req.body.username;
+		//Login takes two params email and password on the body;
+		var email = req.body.email;
 		var password = req.body.password;
 
-
+		authentication.authenticateUser(email, password).then(function(user){
+			res.send(payload(null, user));
+		}).catch(function(err){
+			res.send(payload(err));
+		});
   });
 
 	router.get('/logout', function(req, res, next) {

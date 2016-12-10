@@ -4,7 +4,8 @@ var config = require('./../bin/config');
 
 var exports = {};
 mongoose.connect(config.mongooseUrl);
-mongoose.Promise = Promise;
+mongoose.Promise = global.Promise;
+
 
 
 var recursiveReadSync = require('recursive-readdir-sync');

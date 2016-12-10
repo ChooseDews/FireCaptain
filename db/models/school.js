@@ -23,5 +23,17 @@ module.exports = function(mongoose) {
     type: String //School | Company
   });
 
+  model.schema.statics.create = function(name, email, phone, district) {
+      var school = new this({
+          name: name,
+          email: email,
+          phone: phone,
+          district: district
+      });
+
+      return school.save();
+  };
+
+
   return model;
 };

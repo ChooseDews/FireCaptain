@@ -4,9 +4,9 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var auth = function(db, logger, config, exports) {
 
 
-    exports.signToken = function(payload) {
+    exports.signToken = signToken = function(payload) {
         return jwt.sign(payload, config.jwtSecret, {
-            expiresIn: 60*60*24*2 // expires in 48 hours
+            expiresIn: 60 * 60 * 24 * 2 // expires in 48 hours
         });
     };
 
@@ -25,35 +25,40 @@ var auth = function(db, logger, config, exports) {
             req.user = user;
             next();
         }).catch(function() {
-					return authMiddleError('Invalid or no token provided', res);
-				});
+            return authMiddleError('Invalid or no token provided', res);
+        });
     };
 
-		exports.districtMiddle = function(req, res, next){
-			if(!req.user || !req.user.district) return res.send(401);
-			db.District.findById(req.user.district).then(function(district){
-				req.district = district;
-				next();
-			}).catch(function(err){
-				return authMiddleError('No district found', res);
-			});
-		};
+    exports.districtMiddle = function(req, res, next) {
+        if (!req.user || !req.user.district) return res.send(401);
+        db.District.findById(req.user.district).then(function(district) {
+            req.district = district;
+            next();
+        }).catch(function(err) {
+            return authMiddleError('No district found', res);
+        });
+    };
 
-		exports.authMiddleError = authMiddleError = function(message, res){
-			return res.status(401).send({
-					success: false,
-					message: 'Invalid or no token provided'
-			});
-		};
+    exports.authMiddleError = authMiddleError = function(message, res) {
+        return res.status(401).send({
+            success: false,
+            message: 'Invalid or no token provided'
+        });
+    };
 
-    exports.authenticateUser = function(email, password){
-      db.Users.findOne({email: email}).then(function(user){
-        if(user.password == password) return user;
-        if(user.password != password) throw "Invalid Password";
-      }).catch(function(user){
-        throw "User Not Found";
-      })
-    }
+    exports.authenticateUser = function(email, password) {
+        return db.Users.findOne({
+            email: email.toLowerCase()
+        }).then(function(user) {
+            if(!user) throw "User Not Found";
+            if (user.validPassword(password)) {
+                user = user.toObject();
+                user.token = signToken(user);
+                return user;
+            }
+            if (!user.validPassword(password)) throw "Invalid Password";
+        });
+    };
 
 
 
