@@ -44,12 +44,14 @@
     "recursive-readdir-sync": "^1.0.6",
     "redis": "^2.6.3",
     "redux": "^3.6.0",
+    "redux-auth-wrapper": "^0.9.0",
     "redux-thunk": "^2.1.0",
     "renderkid": "^2.0.0",
     "semantic-ui-react": "^0.61.10",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.7.1",
     "socket.io-redis": "^2.0.1",
+    "store2": "^2.3.2",
     "webpack": "^1.14.0"
   },
   "devDependencies": {
