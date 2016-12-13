@@ -18,8 +18,8 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 var redis = require('redis').createClient;
 var adapter = require('socket.io-redis');
-var pub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password });
-var sub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password });
+var pub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password, return_buffers: true });
+var sub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password, return_buffers: true });
 io.adapter(adapter({ pubClient: pub, subClient: sub }));
 
 
