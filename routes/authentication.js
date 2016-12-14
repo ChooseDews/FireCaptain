@@ -1,12 +1,12 @@
 var urlPath = '/api/auth';
 module.exports = function (app, router, services) {
 
-	var authentication = services.authentication;
+	var auth = services.authentication;
 	var payload = services.payload;
 
   /* GET home page. */
-  router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Authentication API' });
+  router.post(['/', '/me'], auth.authMiddle, auth.saturateUser, function(req, res, next) {
+    res.send(payload(null, req.user));
   });
 
 	router.post('/login', function(req, res, next) {
@@ -15,8 +15,7 @@ module.exports = function (app, router, services) {
 		var password = req.body.password;
 
 		if(!email || !password) return res.send(payload('Missing Credentials'));
-
-		authentication.authenticateUser(email, password).then(function(user){
+		auth.authenticateUser(email, password).then(function(user){
 			res.send(payload(null, user));
 		}).catch(function(err){
 			res.send(payload(err));

@@ -4,8 +4,7 @@ var db =  services.db;
 
 // Example to create but email must be unqiue
 
-db.Users.create("John", "Dews", "John@example.com", "password", null, null, null).then(function(user){
+db.Schools.create("Penis HS", "penis@example.com", '7274658501', '585098d682fadc2908d5ab80').then(function(user){
 	console.log(user);
-	var valid = user.validPassword("password");
 	console.log(valid);
 });
