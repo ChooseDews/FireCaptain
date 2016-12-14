@@ -4,6 +4,7 @@ import {  browserHistory} from "react-router"
 import thunk from "redux-thunk" //used for async ajax redux
 
 import * as reducers from "./reducers"
+import initialState from "./initialState"
 
 const mainReducer = combineReducers({
 	routing: routerReducer,
@@ -14,6 +15,7 @@ const middleware = routerMiddleware(browserHistory)
 
 const store = createStore(
   mainReducer,
+  initialState,
   compose(
   	applyMiddleware(middleware),
   	applyMiddleware(thunk)

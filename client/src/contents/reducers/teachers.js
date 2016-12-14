@@ -9,7 +9,7 @@ import {
 
 const initialState = List([])
 
-const teachers = (state = [], action) => {
+const teachers = (state = initialState, action) => {
 	switch(action.type) {
 		case ADD_TEACHERS: {
 			return fromJS(action.teachers)

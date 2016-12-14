@@ -4,7 +4,7 @@ import { Link } from "react-router"
 import { Icon, Label, Menu, Table, Button, Checkbox } from 'semantic-ui-react'
 import FlipMove from 'react-flip-move';
 
-import { teacherActions } from "../actions"
+import { teacherActions, authActions } from "../actions"
 
 class HiddenHome extends React.Component {
 	componentDidMount() {
@@ -44,7 +44,12 @@ class HiddenHome extends React.Component {
 			      			)
 			      	})}
 				  </FlipMove>
-
+				  <Button onClick={() => {
+				  	this.props.login()
+				  }}>login</Button>
+				  <Button onClick={() => {
+				  	this.props.logout()
+				  }}>logout</Button>
 			</div>
 			)
 	}
@@ -69,6 +74,12 @@ const Home = connect(
 			},
 			removeTeachers: () => {
 				dispatch(teacherActions.removeTeachers())
+			},
+			login: () => {
+				dispatch(authActions.login("john@example.com", "password"))
+			},
+			logout: () => {
+				dispatch(authActions.logout())
 			}
 		}
 	}
