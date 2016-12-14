@@ -29,6 +29,14 @@ var auth = function(db, logger, config, exports) {
         });
     };
 
+    exports.saturateUser = function(req, res, next){
+      var userId = req.user._id;
+      db.Users.lookup(userId).then(function(user){
+        req.user = user;
+        next();
+      });
+    }
+
     exports.districtMiddle = function(req, res, next) {
         if (!req.user || !req.user.district) return res.send(401);
         db.District.findById(req.user.district).then(function(district) {

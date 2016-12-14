@@ -8,15 +8,15 @@ module.exports = function(mongoose) {
     model.schema = mongoose.Schema({
         district: {
             type: Schema.Types.ObjectId,
-            ref: 'Districts'
+            ref: 'District'
         },
         school: {
             type: Schema.Types.ObjectId,
-            ref: 'Schools'
+            ref: 'School'
         },
         drill: {
             type: Schema.Types.ObjectId,
-            ref: 'Drills'
+            ref: 'Drill'
         },
         permission: {
             sudo: Boolean,
@@ -64,6 +64,10 @@ module.exports = function(mongoose) {
         if (drill) user.drill = drill;
         user.password = user.generateHash(password);
         return user.save();
+    };
+
+    model.schema.statics.lookup = function(userId){
+      return this.findById(userId).select('-password --v').populate('district').populate('school');
     };
 
 
