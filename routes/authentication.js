@@ -14,6 +14,8 @@ module.exports = function (app, router, services) {
 		var email = req.body.email;
 		var password = req.body.password;
 
+		if(!email || !password) return res.send(payload('Missing Credentials'));
+
 		authentication.authenticateUser(email, password).then(function(user){
 			res.send(payload(null, user));
 		}).catch(function(err){
