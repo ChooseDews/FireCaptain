@@ -61,7 +61,7 @@ var auth = function(db, logger, config, exports) {
     exports.authMiddleError = authMiddleError = function(message, res) {
         return res.status(401).send({
             success: false,
-            message: 'Invalid or no token provided'
+            message: message
         });
     };
 
@@ -78,6 +78,34 @@ var auth = function(db, logger, config, exports) {
             if (!user.validPassword(password)) throw "Invalid Password";
         });
     };
+
+    exports.isSudo = function(req, res, next){
+      if(!req.user || !req.user.permission.sudo){
+         return authMiddleError('Invalid Permission Level', res);
+      }
+      next();
+    }
+
+    exports.isDistrict = function(req, res, next){
+      if(!req.user || !req.user.permission.district){
+         return authMiddleError('Invalid Permission Level', res);
+      }
+      next();
+    }
+
+    exports.isSchool = function(req, res, next){
+      if(!req.user || !req.user.permission.school){
+         return authMiddleError('Invalid Permission Level', res);
+      }
+      next();
+    }
+
+    exports.isDrill = function(req, res, next){
+      if(!req.user || !req.user.permission.drill){
+         return authMiddleError('Invalid Permission Level', res);
+      }
+      next();
+    }
 
 
 
