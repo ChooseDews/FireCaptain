@@ -4,8 +4,7 @@ module.exports = function (app, router, services) {
 	var auth = services.authentication;
 	var payload = services.payload;
 
-  /* GET home page. */
-  router.get(['/', '/me'], auth.authMiddle, auth.saturateUser, function(req, res, next) {
+  router.get('/me', auth.authMiddle, auth.saturateUser, function(req, res, next) {
     res.send(payload(null, req.user));
   });
 
