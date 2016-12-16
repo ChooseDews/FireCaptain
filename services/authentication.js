@@ -85,28 +85,31 @@ var auth = function(db, logger, config, exports) {
          return authMiddleError('Invalid Permission Level', res);
       }
       next();
-    }
+    };
 
     exports.isDistrict = function(req, res, next){
+      if(req.user.permission.sudo) return next();
       if(!req.user || !req.user.permission.district){
          return authMiddleError('Invalid Permission Level', res);
       }
       next();
-    }
+    };
 
     exports.isSchool = function(req, res, next){
+      if(req.user.permission.district || req.user.permission.sudo) return next();
       if(!req.user || !req.user.permission.school){
          return authMiddleError('Invalid Permission Level', res);
       }
       next();
-    }
+    };
 
     exports.isDrill = function(req, res, next){
+      if(req.user.permission.school || req.user.permission.district || req.user.permission.sudo) return next();
       if(!req.user || !req.user.permission.drill){
          return authMiddleError('Invalid Permission Level', res);
       }
-      next();
-    }
+      return next();
+    };
 
 
 
