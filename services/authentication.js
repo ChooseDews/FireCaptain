@@ -42,6 +42,7 @@ var auth = function(db, logger, config, exports) {
         if (!school) return res.send(401);
         db.Schools.findById(school).then(function(school) {
             req.school = school;
+            if(req.user.district != req.school.district) return authMiddleError('Invalid Permission', res);
             next();
         }).catch(function(err) {
             return authMiddleError('No school found', res);
