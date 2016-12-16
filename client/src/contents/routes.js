@@ -12,14 +12,18 @@ import { Layout } from './containers';
 import { Home } from './pages';
 import { About } from "./pages";
 import { Schools } from "./pages";
+import { Login } from "./pages"
 
 
 const routes = (
-  <Route path="/" component={Layout}>
-    <IndexRoute component={Home} />
-    <Route path="/about" component={UserIsDrill(About)} />
-    <Route path="/schools" component={Schools} />
-  </Route>
+	<Route>
+	  <Route path="/" component={Layout}>
+	    <IndexRoute component={Home} />
+	    <Route path="/about" component={UserIsDrill(About)} />
+	    <Route path="/schools" component={Schools} />
+	  </Route>
+	  <Route path="/login" component={Login} />
+  	</Route>
 );
 
 export default routes;

@@ -5,7 +5,7 @@ import { routerActions } from 'react-router-redux'
 export const UserIsSudo = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/sudoLogin',
+	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsSudo',
 	predicate: user => user.getIn(['permission', 'sudo']),
 	allowRedirectBack: false
@@ -14,7 +14,7 @@ export const UserIsSudo = UserAuthWrapper({
 export const UserIsDistrict = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/districtLogin',
+	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsDistrict',
 	predicate: user => user.getIn(['permission', 'district']),
 	allowRedirectBack: false
@@ -23,7 +23,7 @@ export const UserIsDistrict = UserAuthWrapper({
 export const UserIsSchool = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/schoolLogin',
+	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsSchool',
 	predicate: user => user.getIn(['permission', 'school']),
 	allowRedirectBack: false
@@ -32,7 +32,7 @@ export const UserIsSchool = UserAuthWrapper({
 export const UserIsDrill = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/drillLogin',
+	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsDrill',
 	predicate: user => user.getIn(['permission', 'drill']),
 	allowRedirectBack: false
