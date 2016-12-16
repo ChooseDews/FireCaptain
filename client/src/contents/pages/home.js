@@ -23,7 +23,7 @@ class HiddenHome extends React.Component {
 				<Button onClick={() => {
 			    	this.props.addTeacher({
 			    		id: 5,
-			    		name: "riley",
+			    		name: "John's Dick",
 			    		email: "riley@gmail.com"
 			    	})
 			    }}>Add New Teacher</Button>
