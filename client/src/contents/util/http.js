@@ -43,5 +43,3 @@ const http = {
 }
 
 export default http
-
-window.http = http
