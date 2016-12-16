@@ -6,11 +6,11 @@ module.exports = function(mongoose) {
   model.schema = mongoose.Schema({
 		district:  {
       type: Schema.Types.ObjectId,
-      ref: 'Districts'
+      ref: 'District'
     },
     school:  {
       type: Schema.Types.ObjectId,
-      ref: 'Schools'
+      ref: 'School'
     },
     start: Date,
     end: Date,

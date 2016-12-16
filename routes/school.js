@@ -3,8 +3,8 @@ module.exports = function (app, router, services) {
 
 	var auth = services.authentication;
 
-  router.get('/', function(req,res){
-      res.send('hello');
+	router.get(['/', '/:school'], auth.saturateSchool, function(req,res){
+      res.send(req.school);
   });
 
 

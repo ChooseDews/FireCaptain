@@ -17,7 +17,7 @@ module.exports = function(mongoose) {
     }],
     district: {
       type: Schema.Types.ObjectId,
-      ref: 'Districts'
+      ref: 'District'
     },
     location: Number, // zip code
     type: String //School | Company
