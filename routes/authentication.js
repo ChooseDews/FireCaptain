@@ -5,7 +5,7 @@ module.exports = function (app, router, services) {
 	var payload = services.payload;
 
   /* GET home page. */
-  router.post(['/', '/me'], auth.authMiddle, auth.saturateUser, function(req, res, next) {
+  router.get('/me', auth.authMiddle, auth.saturateUser, function(req, res, next) {
     res.send(payload(null, req.user));
   });
 

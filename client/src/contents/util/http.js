@@ -19,24 +19,29 @@ const errorHandler = (error) => { //handler for unauthorized or other errors
 	}
 }
 
-const setToken = () => { //sets access token
+const makeConfig = (headers) => { //takes in provided headers and makes axios config object
 	let token = store.getState().user.get("token") //get jwt token
-	if (token != null) {
-		axios.defaults.headers.common['x-access-token'] = token;
-	} else {
-		axios.defaults.headers.common['x-access-token'] = undefined;
+	if (token != null) { //if token exists then add it to headers
+		headers = {
+			"x-access-token": token,
+			...headers
+		}
+	}
+	
+	return {
+		headers
 	}
 }
 
 const http = {
 	get: (url, headers = {}) => {
-		setToken()
-		return axios.get(mainUrl + url, headers).catch(errorHandler)
+		return axios.get(mainUrl + url, makeConfig(headers)).catch(errorHandler)
 	},
 	post: (url, params = {}, headers = {}) => {
-		setToken()
-		return axios.post(mainUrl + url, params, headers).catch(errorHandler)
+		return axios.post(mainUrl + url, params, makeConfig(headers)).catch(errorHandler)
 	}
 }
 
 export default http
+
+window.http = http
