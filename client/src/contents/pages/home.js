@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router"
-import { Icon, Label, Menu, Table, Button, Checkbox } from 'semantic-ui-react'
+import { Icon, Label, Menu, Table, Button, Checkbox, Image, Divider } from 'semantic-ui-react'
 import FlipMove from 'react-flip-move';
+
 
 import { teacherActions, authActions } from "../actions"
 
@@ -13,6 +14,15 @@ class HiddenHome extends React.Component {
 	render() {
 		return (
 			<div>
+
+			<Image src='/images/CaptainLogo.png' size='large' centered='true' />
+
+			<br/>
+			<Divider />
+			<br/>
+
+
+
 				<Button color='red' onClick={() => {
 					this.props.removeTeachers()
 				}}>
