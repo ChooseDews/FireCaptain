@@ -13,7 +13,6 @@ class HiddenHome extends React.Component {
 	render() {
 		return (
 			<div>
-				<Link to={"/about"}>About</Link>
 				<Button color='red' onClick={() => {
 					this.props.removeTeachers()
 				}}>
