@@ -35,11 +35,22 @@ var auth = function(db, logger, config, exports) {
         req.user = user;
         next();
       });
-    }
+    };
 
-    exports.districtMiddle = function(req, res, next) {
+    exports.saturateSchool = function(req, res, next) {
+        var school = req.user.school || req.body.school || req.query.school || req.params.school; //Search for the token;
+        if (!school) return res.send(401);
+        db.Schools.findById(school).then(function(school) {
+            req.school = school;
+            next();
+        }).catch(function(err) {
+            return authMiddleError('No school found', res);
+        });
+    };
+
+    exports.saturateDistrict = function(req, res, next) {
         if (!req.user || !req.user.district) return res.send(401);
-        db.District.findById(req.user.district).then(function(district) {
+        db.Districts.findById(req.user.district).then(function(district) {
             req.district = district;
             next();
         }).catch(function(err) {
