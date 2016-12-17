@@ -15,7 +15,7 @@ class HiddenHome extends React.Component {
 		return (
 			<div>
 
-			<Image src='/images/CaptainLogo.png' size='large' centered='true' />
+			<Image src='/images/CaptainLogo.png' size='large' centered={true} />
 
 			<br/>
 			<Divider />

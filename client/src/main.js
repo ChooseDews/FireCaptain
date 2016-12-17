@@ -14,7 +14,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render((
 	<Provider store={store}>
-		<Socket uri={window.location.href}>
+		<Socket uri={window.location.protocol + "//" + window.location.host}>
 			<Router history={history}>
 				{routes}
 			</Router>

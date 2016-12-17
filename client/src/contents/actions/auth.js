@@ -3,12 +3,12 @@ import {
 	REMOVE_AUTH_OBJECT
 } from "../constants"
 
-import * as axios from "axios"
+import { http } from "../util"
 import store from "store2"
 
 function login(email, password) {
 	return function(dispatch) {
-		return axios.post("http://localhost:3000/api/auth/login", {
+		return http.post("/api/auth/login", {
 			email,
 			password
 		}).then(
@@ -23,9 +23,7 @@ function login(email, password) {
 				} else {
 					//there was an error logging in. Trigger dispatch
 				}
-			},
-			(error) => {
-				//there was an error logging in. Trigger dispatch
+				return data
 			}
 		)
 	}
