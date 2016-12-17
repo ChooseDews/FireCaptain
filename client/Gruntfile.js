@@ -8,6 +8,7 @@ module.exports = function(grunt) {
       "bower_components/semantic/dist/semantic.min.css",
 
 
+      "./src/**.css"
     ];
 
 

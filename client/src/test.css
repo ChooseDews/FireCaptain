@@ -1,0 +1,18 @@
+panel {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+
+panel.login {
+  background-image: url('/images/high-school.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.loginPanel{
+  background-color: white;
+  padding: 40px !important;
+}

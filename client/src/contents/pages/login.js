@@ -35,10 +35,11 @@ class HiddenLogin extends React.Component {
 	}
 	render() {
 		return (
+			<panel className="login">
 			<div style={{height: "400px", width: "100%", position: "absolute", top: "50%", marginTop: "-200px"}}>
 				<Grid centered columns={3}>
-				    <Grid.Column style={{backgroundColor: "#DADADA", borderRadius: "5px"}}>
-						<Image src='/images/CaptainLogo.png' />
+				    <Grid.Column className="loginPanel">
+						<Image src='/images/LogoText.png' />
 				    	<Form onSubmit={this.submit.bind(this)}>
 						    <Form.Field>
 						      <label>Email</label>
@@ -62,6 +63,7 @@ class HiddenLogin extends React.Component {
 				    </Grid.Column>
 				  </Grid>
 			</div>
+			</panel>
 			)
 	}
 }
