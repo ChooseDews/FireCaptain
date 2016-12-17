@@ -41,6 +41,7 @@ class HiddenLogin extends React.Component {
 				    <Grid.Column className="loginPanel">
 						<Image src='/images/LogoText.png' />
 				    	<Form onSubmit={this.submit.bind(this)}>
+							<Message color='red' style={{display: this.state.error? "block":"none"}}>{this.state.error}</Message>
 						    <Form.Field>
 						      <label>Email</label>
 						      <input placeholder='Email' name="email" value={this.state.email} onChange={(e) => {
@@ -58,7 +59,6 @@ class HiddenLogin extends React.Component {
 						      }} />
 						    </Form.Field>
 						    <Button type='submit' fluid color="teal">Login</Button>
-						    <Message color='red' style={{display: this.state.error? "block":"none"}}>{this.state.error}</Message>
 						</Form>
 				    </Grid.Column>
 				  </Grid>
