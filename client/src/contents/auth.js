@@ -7,8 +7,7 @@ export const UserIsSudo = UserAuthWrapper({
 	redirectAction: routerActions.replace,
 	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsSudo',
-	predicate: user => user.getIn(['permission', 'sudo']),
-	allowRedirectBack: false
+	predicate: user => user.getIn(['permission', 'sudo'])
 })
 
 export const UserIsDistrict = UserAuthWrapper({
@@ -16,8 +15,7 @@ export const UserIsDistrict = UserAuthWrapper({
 	redirectAction: routerActions.replace,
 	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsDistrict',
-	predicate: user => user.getIn(['permission', 'district']),
-	allowRedirectBack: false
+	predicate: user => user.getIn(['permission', 'district'])
 })
 
 export const UserIsSchool = UserAuthWrapper({
@@ -25,8 +23,7 @@ export const UserIsSchool = UserAuthWrapper({
 	redirectAction: routerActions.replace,
 	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsSchool',
-	predicate: user => user.getIn(['permission', 'school']),
-	allowRedirectBack: false
+	predicate: user => user.getIn(['permission', 'school'])
 })
 
 export const UserIsDrill = UserAuthWrapper({
@@ -34,6 +31,14 @@ export const UserIsDrill = UserAuthWrapper({
 	redirectAction: routerActions.replace,
 	failureRedirectPath: '/login',
 	wrapperDisplayName: 'UserIsDrill',
-	predicate: user => user.getIn(['permission', 'drill']),
+	predicate: user => user.getIn(['permission', 'drill'])
+})
+
+export const UserIsNotLoggedIn = UserAuthWrapper({
+	authSelector: state => state.user,
+	redirectAction: routerActions.replace,
+	failureRedirectPath: '/',
+	wrapperDisplayName: 'UserIsDrill',
+	predicate: user => user.get("permission") == undefined,
 	allowRedirectBack: false
 })

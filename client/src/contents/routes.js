@@ -5,7 +5,8 @@ import {
 	UserIsSudo,
 	UserIsDistrict,
 	UserIsSchool,
-	UserIsDrill
+	UserIsDrill,
+	UserIsNotLoggedIn
 } from "./auth"
 
 import { Layout } from './containers';
@@ -22,7 +23,7 @@ const routes = (
 	    <Route path="/about" component={UserIsDrill(About)} />
 	    <Route path="/schools" component={Schools} />
 	  </Route>
-	  <Route path="/login" component={Login} />
+	  <Route path="/login" component={UserIsNotLoggedIn(Login)} />
   	</Route>
 );
 

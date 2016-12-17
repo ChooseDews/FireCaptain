@@ -21,7 +21,12 @@ class HiddenLogin extends React.Component {
 	}
 	successHandler(data) {
 		if (data.success) {
-			this.props.redirect("/about")
+			let redirectPath = this.props.location.query.redirect //where the user was redirected from
+			if (redirectPath) {
+				this.props.redirect(redirectPath)
+			} else {
+				this.props.redirect("/")
+			}
 		} else {
 			this.setState({
 				error: data.error
