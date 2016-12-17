@@ -26,11 +26,13 @@ module.exports = function(app, express, env) {
             log: console.log
         }));
 
+        app.use(express.static(path.join(__dirname, '/dist')));
+
+
         app.get('*', function response(req, res) {
             res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
             res.end();
         });
-        app.use(express.static(path.join(__dirname, '/dist')));
 
 
 
