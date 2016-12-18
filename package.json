@@ -6,7 +6,7 @@
     "dev": "concurrently --kill-others \"node ./bin/www dev\" \"cd client && grunt\"",
     "test": "cd client && grunt",
     "prod": "npm run clean && npm run build && node ./bin/www prod",
-    "build": "set NODE_ENV=production && webpack --config client/webpack/webpack.config.prod.js --define process.env.NODE_ENV='\"production\"' --progress --profile --colors && cd client && grunt prod",
+    "build": "set NODE_ENV=production && webpack --config client/webpack/webpack.config.prod.js --progress --profile --colors && cd client && grunt prod",
     "clean": "rm -rf client/dist",
     "start": "npm run dev",
     "postinstall": "cd client && bower install --allow-root && npm install nodemon pm2 grunt -g"
