@@ -3,7 +3,7 @@ import * as axios from "axios"
 import store from "../store"
 import { replace } from 'react-router-redux'
 
-const mainUrl = "http://localhost:3000" //base url for routes
+const mainUrl = "" //base url for routes
 
 const errorHandler = (error) => { //handler for unauthorized or other errors
 	if (error.response) {
@@ -27,7 +27,7 @@ const makeConfig = (headers) => { //takes in provided headers and makes axios co
 			...headers
 		}
 	}
-	
+
 	return {
 		headers
 	}
