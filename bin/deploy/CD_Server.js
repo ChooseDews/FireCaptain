@@ -9,7 +9,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', function (req, res) {
-  var convert = new Convert();
+  var convert = new Convert({
+    newLine: true
+  });
 
   cmd.get(
        'git status',
@@ -20,8 +22,9 @@ app.get('/', function (req, res) {
 });
 
 app.get('/log', function (req, res) {
-  var convert = new Convert();
-
+  var convert = new Convert({
+    newLine: true
+  });
   cmd.get(
        'git log',
        function(data){
@@ -31,10 +34,13 @@ app.get('/log', function (req, res) {
 });
 
 app.get('/update', function (req, res) {
+  var convert = new Convert({
+    newLine: true
+  });
   cmd.get(
        '. ./update.sh',
        function(data){
-           res.send(data);
+         res.send(convert.toHtml(data));
        }
    );
 });
