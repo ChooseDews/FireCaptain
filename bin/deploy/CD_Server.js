@@ -2,23 +2,30 @@ var express = require('express');
 var app = express();
 var cmd = require('node-cmd');
 var bodyParser = require('body-parser');
+var Convert = require('ansi-to-html');
+
+var working = false;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', function (req, res) {
+  var convert = new Convert();
+
   cmd.get(
        'git status',
        function(data){
-           res.send(data);
+           res.send(convert.toHtml(data));
        }
    );
 });
 
 app.get('/log', function (req, res) {
+  var convert = new Convert();
+
   cmd.get(
        'git log',
        function(data){
-           res.send(data);
+           res.send(convert.toHtml(data));
        }
    );
 });
@@ -32,9 +39,25 @@ app.get('/update', function (req, res) {
    );
 });
 
+var Update = function(){
+  console.log('Updating From Production');
+ working = true;
+  cmd.get(
+       '. ./update.sh',
+       function(data){
+         console.log('Finished Updating From Production');
+
+           working = false;
+       }
+   );
+};
+
 app.post('/github', function (req, res) {
+  if(req.body && req.body.ref.indexOf('production')){
+    Update();
+  }
   console.log(req.body);
-res.send('Good');
+  res.send('Good');
 });
 
 app.listen(2000, function () {

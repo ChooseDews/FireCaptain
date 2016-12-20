@@ -53,6 +53,7 @@
   ],
   "license": "LicenseRef-LICENSE",
   "dependencies": {
+    "ansi-to-html": "^0.5.0",
     "axios": "^0.15.3",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.6",
