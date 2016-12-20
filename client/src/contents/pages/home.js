@@ -35,6 +35,7 @@ class HiddenHome extends React.Component {
 			<div>
 				<Image src='/images/CaptainLogo.png' size='large' centered={true} />
 				<br/>
+				Text should show up here
 				<Divider />
 				<br/>
 				<Button color='red' onClick={() => {
