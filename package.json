@@ -22,7 +22,7 @@
       "command": "cd client && grunt"
     },
     "prod": {
-      "command": "npm run clean && npm run build && node ./bin/www prod",
+      "command": "npm run clean && npm run build && pm2 start ./bin/www",
       "env": {
         "NODE_ENV": "production"
       }
@@ -43,7 +43,7 @@
       }
     },
     "postinstall": {
-      "command": "cd client && bower install --allow-root && npm install nodemon pm2 grunt -g"
+      "command": "cd client && npm install nodemon pm2 bower grunt -g && bower install --allow-root"
     }
   },
   "description": "Providing Fire Drills to the modern school",
