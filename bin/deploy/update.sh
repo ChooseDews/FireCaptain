@@ -1,5 +1,5 @@
 cd ~/web/FireCaptain
-git pull origin production
+git pull
 npm install
 npm run build
 pm2 reload all
