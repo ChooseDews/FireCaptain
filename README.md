@@ -17,11 +17,12 @@ Other available commands:
 
 | Command       | Function                                                  |
 |---------------|-----------------------------------------------------------|
-| npm start     | Starts the production server.                             |
+| npm start     | Starts the development server.                            |
 | npm run dev   | Starts the development server.                            |
-| npm run prod  | Starts the production server without cleaning or building |
+| npm run prod  | builds and starts a pm2 process for the web server        |
 | npm run clean | Deletes all the compiled webpack files.                   |
 | npm run build | Builds the compiled javascript and html files.            |
+| npm install   | Complete install process including -g and bower deps      |
 
 ## Server
 
@@ -35,7 +36,9 @@ Required External Dependencies
 
 After all external dependencies have been configured in ```server/bin/config.js``` run ```npm install``` within ```server/``` directory to install all the node modules.
 
+See ```bin/deploy``` for information on auto installing Dependencies
+
 #### Runtime
 
-Run ```npm start``` or ```nodemon``` in the ```server/``` directory. Then visit https://localhost:3000
+Run ```npm start``` or ```nodemon``` in the ```/``` directory. Then visit https://localhost:3000
 
