@@ -1,9 +1,8 @@
 
 <p align="center">
-  <img src="https://i.imgur.com/oUO93jC.png" width="300px" alt="Sublime's custom image"/>
+  <img src="/public/images/CaptainLogo.png" width="650px" alt="Sublime's custom image"/>
 </p>
 
-<h1 align="center"><b>Fire Captain</b></h1>
 
 
 
