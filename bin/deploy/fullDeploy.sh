@@ -21,6 +21,7 @@ cd ~
 mkdir ./web
 cd web
 git clone https://3f2a4bec8c284128e4b4c45d07597a0b72c462b7:x-oauth-basic@github.com/ChooseDews/FireCaptain.git
+git pull origin production
 cd FireCaptain
 npm install --unsafe-perm
 
@@ -31,4 +32,5 @@ sudo update-rc.d redis-server enable
 sudo update-rc.d redis-server defaults
 
 cd ~/web/FireCaptain
+pm2 start ./bin/deploy/CD_Server.js
 npm run prod

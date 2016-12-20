@@ -2,45 +2,35 @@ var express = require('express');
 var app = express();
 var cmd = require('node-cmd');
 var bodyParser = require('body-parser');
-var Convert = require('ansi-to-html');
 
 var working = false;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', function (req, res) {
-  var convert = new Convert({
-    newLine: true
-  });
 
+app.get('/', function (req, res) {
   cmd.get(
        'git status',
        function(data){
-           res.send(convert.toHtml(data));
+           res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
        }
    );
 });
 
 app.get('/log', function (req, res) {
-  var convert = new Convert({
-    newLine: true
-  });
   cmd.get(
        'git log',
        function(data){
-           res.send(convert.toHtml(data));
+         res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
        }
    );
 });
 
 app.get('/update', function (req, res) {
-  var convert = new Convert({
-    newLine: true
-  });
   cmd.get(
        '. ./update.sh',
        function(data){
-         res.send(convert.toHtml(data));
+         res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
        }
    );
 });
