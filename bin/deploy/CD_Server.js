@@ -2,10 +2,14 @@ var express = require('express');
 var app = express();
 var cmd = require('node-cmd');
 var bodyParser = require('body-parser');
+var path = require("path");
 
 var working = false;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+var updateCMD = '. '+path.resolve(__dirname, './update.sh');
+console.log(updateCMD);
 
 
 app.get('/', function (req, res) {
@@ -28,7 +32,7 @@ app.get('/log', function (req, res) {
 
 app.get('/update', function (req, res) {
   cmd.get(
-       '. ./update.sh',
+       updateCMD,
        function(data){
          res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
        }
@@ -38,14 +42,7 @@ app.get('/update', function (req, res) {
 var Update = function(){
   console.log('Updating From Production');
  working = true;
-  cmd.get(
-       '. ./update.sh',
-       function(data){
-         console.log('Finished Updating From Production');
-
-           working = false;
-       }
-   );
+  cmd.run(updateCMD);
 };
 
 app.post('/github', function (req, res) {
