@@ -72,7 +72,7 @@ if(!working){
 };
 
 app.post('/github', function (req, res) {
-  if(req.body && req.body.ref.indexOf('production')){
+  if(req.body && req.body.ref.indexOf('production') > 0){
     Update();
   }
   console.log(req.body);
