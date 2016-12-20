@@ -39,11 +39,20 @@ app.get('/update', function (req, res) {
    );
 });
 
+app.get('/working', function (req, res) {
+  res.send('Working: '+working)
+});
+
 var Update = function(){
   console.log('Updating From Production');
  working = true;
-  cmd.run(updateCMD);
-};
+ cmd.get(
+      updateCMD,
+      function(data){
+        console.log(data);
+        working = false;
+      }
+  );};
 
 app.post('/github', function (req, res) {
   if(req.body && req.body.ref.indexOf('production')){
