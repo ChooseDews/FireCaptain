@@ -34,6 +34,8 @@ app.get('/update', function (req, res) {
   cmd.get(
        updateCMD,
        function(data){
+         cmd.run('pm2 reload www');
+
          res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
        }
    );
@@ -47,14 +49,27 @@ app.get('/working', function (req, res) {
 
 var Update = function(){
   console.log('Updating From Production');
+
+if(!working){
+
+
+
  working = true;
  cmd.get(
       updateCMD,
       function(data){
         console.log(data);
+        cmd.run('pm2 reload www');
         working = false;
       }
-  );};
+  );
+
+}else{
+  console.log('Attempted to double work!');
+}
+
+
+};
 
 app.post('/github', function (req, res) {
   if(req.body && req.body.ref.indexOf('production')){
