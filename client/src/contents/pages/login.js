@@ -37,9 +37,9 @@ class HiddenLogin extends React.Component {
 		return (
 			<panel className="login">
 			<div style={{height: "400px", width: "100%", position: "absolute", top: "50%", marginTop: "-200px"}}>
-				<Grid centered columns={3}>
-				    <Grid.Column className="loginPanel">
-						<Image src='/images/LogoText.png' />
+				<Grid centered>
+				    <Grid.Column className="loginPanel" mobile={16} computer={6} tablet={12}>
+						<Image src='/images/LogoText.png'  style={{margin: "auto"}} />
 				    	<Form onSubmit={this.submit.bind(this)}>
 							<Message color='red' style={{display: this.state.error? "block":"none"}}>{this.state.error}</Message>
 						    <Form.Field>
