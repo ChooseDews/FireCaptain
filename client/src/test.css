@@ -12,6 +12,14 @@ panel.login {
   background-size: cover;
 }
 
+panel.error{
+  background-color: gainsboro;
+  text-align: center;
+  padding-top: 25vh;
+  color: black;
+  text-transform: capitalize;;
+}
+
 .loginPanel{
   background-color: white;
   padding: 40px !important;
