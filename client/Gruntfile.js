@@ -15,6 +15,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         concat_css: {
             options: {
+              debugMode: false
                 // Task-specific options go here.
             },
             all: {
