@@ -3,47 +3,53 @@ var app = express();
 var cmd = require('node-cmd');
 var bodyParser = require('body-parser');
 var path = require("path");
+var last = '';
 
 var working = false;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.set('view engine', 'ejs');
+app.set('views',path.resolve(__dirname, './views'));
 
-var updateCMD = '. '+path.resolve(__dirname, './update.sh');
+
+var updateCMD = '. '+path.resolve(__dirname, '../update.sh');
 console.log(updateCMD);
 
+app.get('/test', function (req, res) {
+res.render('home')
+});
 
 app.get('/', function (req, res) {
   cmd.get(
-       'git status',
+       'printf "<b>Current Commit</b>\\n" && git log -n 1 && printf "\\n\\n<b>Git Status</b>\\n" && git status',
        function(data){
-           res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+         res.render('home', {status: data.replace(/(?:\r\n|\r|\n)/g, '<br />'), working: working})
        }
    );
 });
 
-app.get('/log', function (req, res) {
+app.get('/history', function (req, res) {
   cmd.get(
        'git log',
        function(data){
-         res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+         res.render('history', {logs: data.replace(/(?:\r\n|\r|\n)/g, '<br />'), working: working})
        }
    );
 });
 
 app.get('/update', function (req, res) {
-  cmd.get(
-       updateCMD,
-       function(data){
-         cmd.run('pm2 reload www');
-
-         res.send(data.replace(/(?:\r\n|\r|\n)/g, '<br />'));
-       }
-   );
+Update();
+res.redirect('/');
 });
 
 app.get('/working', function (req, res) {
   res.send('Working: '+working)
 });
+
+app.get('/last', function (req, res) {
+  res.render('last', {last: last})
+});
+
 
 
 
@@ -58,7 +64,9 @@ if(!working){
  cmd.get(
       updateCMD,
       function(data){
+        console.log('Got Here')
         console.log(data);
+        last = data.replace(/(?:\r\n|\r|\n)/g, '<br />');
         cmd.run('pm2 reload www');
         working = false;
       }
