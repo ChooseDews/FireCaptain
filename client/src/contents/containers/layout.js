@@ -10,9 +10,9 @@ class HiddenLayout extends React.Component {
 	render() {
 		return (
 			<div>
-				<Menu attached="top">
+				<Menu attached="top" color="blue" inverted>
 					<Menu.Item>
-						<img src='/images/logo.png' />
+						<img src='/images/logoWhite.png' />
 					</Menu.Item>
 					<Menu.Item as={Link} to="/">
 						Home
@@ -56,7 +56,7 @@ class HiddenLayout extends React.Component {
 						</Dropdown.Menu>
 					</Dropdown>
 				</Menu>
-				<Container>
+				<Container style={{marginTop: "30px"}}>
 					{this.props.children}
 				</Container>
 			</div>
