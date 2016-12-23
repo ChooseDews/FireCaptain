@@ -8,17 +8,27 @@ import { Provider } from "react-redux"
 import { Socket } from 'react-socket-io';
 import * as axios from "axios";
 import { fromJS } from "immutable"
+import moment from "moment"
 
 import routes from './contents/routes';
 import storeHolder from "./contents/store";
 
-import getToken from "./contents/token" //function to get jwt token
+import { getToken, getTimestamp, clearTokenAndTimestamp } from "./contents/token" //function to get jwt token
 
+//get jwt token and timestamp
 let token = getToken()
+let timestamp = getTimestamp()
 
-console.log("theToken", token)
+if (token && timestamp) {
+	//get the time that the token has been used
+	let currentTime = moment(new Date())
+	var tokenDuration = moment.duration(currentTime.diff(moment.unix(timestamp))).asHours();
+	if (tokenDuration >= 48) { //token has expired
+		clearTokenAndTimestamp()
+	}
+}
 
-if (token) { //if user is logged in
+if (token && tokenDuration < 48) { //if user is logged in
 	axios.get("/api/auth/me", {
 		headers: {
 			"x-access-token": token,

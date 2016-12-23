@@ -7,6 +7,7 @@ import {
 
 import { http } from "../util"
 import store from "store2"
+import moment from "moment"
 
 function login(email, password) {
 	return (dispatch) => {
@@ -17,8 +18,8 @@ function login(email, password) {
 			(data) => {
 				var { data } = data
 				if (data.success) {
-					store.set("user", data.data) //sets local storage
 					store.set("token", data.data.token)
+					store.set("timestamp", moment(new Date()).subtract(3, "days").unix()) //sets timestamp of token
 					dispatch({ //set user in state
 						type: ADD_AUTH_OBJECT,
 						user: data.data
@@ -37,8 +38,9 @@ function login(email, password) {
 }
 
 function logout() {
-	store.remove("user")
+	//remove token and timestamp
 	store.remove("token")
+	store.remove("timestamp")
 	return [{
 		type: REMOVE_AUTH_OBJECT
 	},
