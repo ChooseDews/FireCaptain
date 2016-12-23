@@ -36,7 +36,12 @@ class HiddenHome extends React.Component {
 			<div>
 				<Image src='/images/CaptainLogo.png' size='large' centered={true} />
 				<br/>
-				<Drill></Drill>
+				<h1>Recent Drills</h1>
+				<Drill school='Chapel Hill High' progress={60}></Drill>
+				<Drill school='Chapel Hill High' progress={100}></Drill>
+				<Drill school='Chapel Hill High' progress={100}></Drill>
+				<Drill school='Chapel Hill High' progress={98}></Drill>
+
 				<Divider />
 				<br/>
 				<Button color='red' onClick={() => {

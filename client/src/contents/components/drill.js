@@ -9,14 +9,21 @@ class Drill extends React.Component {
     return (
 			<div>
 			    <Segment>
-			        <Grid>
+			        <Grid padded>
 			            <Grid.Row>
 			                <Grid.Column width={2}>
-			                    <CircularProgressbar percentage={60} /> </Grid.Column>
-			                <Grid.Column width={14}> <h2> <span className="ui grey header">DRILL ON</span> | <span className="ui black header"> <Moment format="YYYY/MM/DD"></Moment></span></h2> </Grid.Column>
+			                    <CircularProgressbar percentage={this.props.progress} /> </Grid.Column>
+			                <Grid.Column width={14} style={{marginTop: "20px"}}>
+											 <h2 className="ui header">
+											 {this.props.school} <small className="grey-text"> <Moment format="MMM Do YYYY @ h:m a"></Moment></small>
+											 <div className="sub header"><b>100</b>/200 Zones</div>
+											 <div className="sub header"><b>300</b>/800 Rooms</div>
+											 </h2>
+											 </Grid.Column>
 			            </Grid.Row>
 			        </Grid>
 			    </Segment>
+					<br/>
 			</div>
     );
   }
