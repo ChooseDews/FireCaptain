@@ -3,8 +3,9 @@ import { connect } from "react-redux"
 import { Link } from "react-router"
 import { Icon, Label, Menu, Table, Button, Checkbox, Image, Divider } from 'semantic-ui-react'
 import FlipMove from 'react-flip-move';
-import { List } from "immutable"
-import _ from "mudash"
+import { List } from "immutable";
+import _ from "mudash";
+import Drill from '../components/drill';
 
 
 import { teacherActions, authActions } from "../actions"
@@ -35,6 +36,7 @@ class HiddenHome extends React.Component {
 			<div>
 				<Image src='/images/CaptainLogo.png' size='large' centered={true} />
 				<br/>
+				<Drill></Drill>
 				<Divider />
 				<br/>
 				<Button color='red' onClick={() => {
