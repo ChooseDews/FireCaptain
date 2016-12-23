@@ -1,9 +1,8 @@
 
 <p align="center">
-  <img src="https://i.imgur.com/oUO93jC.png" width="300px" alt="Sublime's custom image"/>
+  <img src="/public/images/CaptainLogo.png" width="650px" alt="Sublime's custom image"/>
 </p>
 
-<h1 align="center"><b>Fire Captain</b></h1>
 
 
 
@@ -11,18 +10,19 @@
 To install client dependencies go to the client folder and run:
 
     npm install
-To start the production server run:
+To start the development server run:
 
     npm start
 Other available commands:
 
 | Command       | Function                                                  |
 |---------------|-----------------------------------------------------------|
-| npm start     | Starts the production server.                             |
+| npm start     | Starts the development server.                            |
 | npm run dev   | Starts the development server.                            |
-| npm run prod  | Starts the production server without cleaning or building |
+| npm run prod  | builds and starts a pm2 process for the web server        |
 | npm run clean | Deletes all the compiled webpack files.                   |
 | npm run build | Builds the compiled javascript and html files.            |
+| npm install   | Complete install process including -g and bower deps      |
 
 ## Server
 
@@ -36,7 +36,9 @@ Required External Dependencies
 
 After all external dependencies have been configured in ```server/bin/config.js``` run ```npm install``` within ```server/``` directory to install all the node modules.
 
+See ```bin/deploy``` for information on auto installing Dependencies
+
 #### Runtime
 
-Run ```npm start``` or ```nodemon``` in the ```server/``` directory. Then visit https://localhost:3000
+Run ```npm start``` or ```nodemon``` in the ```/``` directory. Then visit https://localhost:3000
 

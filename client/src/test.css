@@ -12,7 +12,32 @@ panel.login {
   background-size: cover;
 }
 
+panel.error{
+  background-color: gainsboro;
+  text-align: center;
+  padding-top: 25vh;
+  color: black;
+  text-transform: capitalize;;
+}
+
 .loginPanel{
   background-color: white;
   padding: 40px !important;
+}
+
+.CircularProgressbar .CircularProgressbar-path {
+  stroke: #3e98c7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease 0s;
+}
+
+.CircularProgressbar .CircularProgressbar-trail {
+  stroke: #d6d6d6;
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+  fill: #3e98c7;
+  font-size: 20px;
+  dominant-baseline: middle;
+  text-anchor: middle;
 }

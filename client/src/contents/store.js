@@ -31,10 +31,6 @@ storeCreator.prototype.initializeStore = function(initialState) {
 	this.store = store
 }
 
-storeCreator.prototype.getStore = function() {
-	return this.store
-}
-
 const storeHolder = new storeCreator() //instance of storeholder
 
 export default storeHolder
