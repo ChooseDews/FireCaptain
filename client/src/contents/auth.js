@@ -2,39 +2,51 @@
 import { UserAuthWrapper } from 'redux-auth-wrapper'
 import { routerActions } from 'react-router-redux'
 
-export const UserIsSudo = UserAuthWrapper({
+const UserIsSudo = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/login',
+	failureRedirectPath: '/unauthorized',
 	wrapperDisplayName: 'UserIsSudo',
-	predicate: user => user.getIn(['permission', 'sudo'])
+	predicate: user => user.getIn(['permission', 'sudo']),
+	allowRedirectBack: false
 })
 
-export const UserIsDistrict = UserAuthWrapper({
+const UserIsDistrict = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/login',
+	failureRedirectPath: '/unauthorized',
 	wrapperDisplayName: 'UserIsDistrict',
-	predicate: user => user.getIn(['permission', 'district'])
+	predicate: user => user.getIn(['permission', 'district']),
+	allowRedirectBack: false
 })
 
-export const UserIsSchool = UserAuthWrapper({
+const UserIsSchool = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/login',
+	failureRedirectPath: '/unauthorized',
 	wrapperDisplayName: 'UserIsSchool',
-	predicate: user => user.getIn(['permission', 'school'])
+	predicate: user => user.getIn(['permission', 'school']),
+	allowRedirectBack: false
 })
 
-export const UserIsDrill = UserAuthWrapper({
+const UserIsDrill = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
-	failureRedirectPath: '/login',
+	failureRedirectPath: '/unauthorized',
 	wrapperDisplayName: 'UserIsDrill',
-	predicate: user => user.getIn(['permission', 'drill'])
+	predicate: user => user.getIn(['permission', 'drill']),
+	allowRedirectBack: false
 })
 
-export const UserIsNotLoggedIn = UserAuthWrapper({
+const UserIsLoggedIn = UserAuthWrapper({
+	authSelector: state => state.user.get("permission"),
+	redirectAction: routerActions.replace,
+	failureRedirectPath: '/login',
+	wrapperDisplayName: 'UserIsLoggedIn'
+})
+
+//used for login page
+export const IsNotLoggedIn = UserAuthWrapper({
 	authSelector: state => state.user,
 	redirectAction: routerActions.replace,
 	failureRedirectPath: '/',
@@ -42,3 +54,24 @@ export const UserIsNotLoggedIn = UserAuthWrapper({
 	predicate: user => user.get("permission") == undefined,
 	allowRedirectBack: false
 })
+
+
+/*
+will redirect to login if not logged in and will redirect to unauthorized if logged in and doesnt have the proper permissions
+*/
+
+export const IsSudo = (component) => {
+	return UserIsLoggedIn(UserIsSudo(component))
+}
+
+export const IsDistrict = (component) => {
+	return UserIsLoggedIn(UserIsDistrict(component))
+}
+
+export const IsSchool = (component) => {
+	return UserIsLoggedIn(UserIsSchool(component))
+}
+
+export const IsDrill = (component) => {
+	return UserIsLoggedIn(UserIsDrill(component))
+}
