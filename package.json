@@ -84,6 +84,7 @@
     "react-flip-move": "^2.7.2",
     "react-moment": "0.0.3",
     "react-redux": "^4.4.6",
+    "react-responsive": "^1.2.5",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.7",
     "react-router-transition": "0.0.6",
