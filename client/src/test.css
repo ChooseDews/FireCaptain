@@ -20,6 +20,12 @@ panel.error{
   text-transform: capitalize;;
 }
 
+@media (max-width: 600px) {
+  panel.error{
+  padding-top: 10vh;
+  }
+}
+
 .loginPanel{
   background-color: white;
   padding: 40px !important;

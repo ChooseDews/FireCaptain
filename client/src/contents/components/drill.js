@@ -11,9 +11,10 @@ class Drill extends React.Component {
 			    <Segment>
 			        <Grid padded>
 			            <Grid.Row>
-			                <Grid.Column width={2}>
+                      <Grid.Column mobile={4} only={'mobile'}></Grid.Column>
+			                <Grid.Column mobile={8} tablet={4} computer={2}>
 			                    <CircularProgressbar percentage={this.props.progress} /> </Grid.Column>
-			                <Grid.Column width={14} style={{marginTop: "20px"}}>
+			                <Grid.Column mobile={16} tablet={12} computer={14} style={{marginTop: "20px"}}>
 											 <h2 className="ui header">
 											 {this.props.school} <small className="grey-text"> <Moment format="MMM Do YYYY @ h:m a"></Moment></small>
 											 <div className="sub header"><b>100</b>/200 Zones</div>
