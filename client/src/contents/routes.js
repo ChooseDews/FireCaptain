@@ -18,7 +18,8 @@ import {
 	Login,
 	NotFound,
 	Unauthorized,
-	ErrorPage
+	ErrorPage,
+	School
 } from "./pages"
 
 
@@ -28,6 +29,8 @@ const routes = (
 	    <IndexRoute component={Home} />
 	    <Route path="/about" component={IsDistrict(About)} />
 	    <Route path="/schools" component={IsDistrict(Schools)} />
+			<Route path="/school" component={IsDistrict(School)} />
+
 	  </Route>
 	  <Route path="/login" component={IsNotLoggedIn(Login)} />
 
