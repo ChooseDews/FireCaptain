@@ -6,7 +6,9 @@ module.exports = {
 		host: "localhost",
 		port: 6379,
 		password: ""
-	}
+	},
+	sendgrid: "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",
+	email: "robot@firecaptin.io"
 
 
 

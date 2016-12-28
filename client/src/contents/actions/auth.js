@@ -1,3 +1,7 @@
+import { http } from "../util"
+import store from "store2"
+import moment from "moment"
+
 import {
 	ADD_AUTH_OBJECT,
 	REMOVE_AUTH_OBJECT,
@@ -5,8 +9,7 @@ import {
 	CLEAR_JWT_TOKEN
 } from "../constants"
 
-import { http } from "../util"
-import store from "store2"
+import { connectSocket, disconnectSocket } from "../socket"
 
 function login(email, password) {
 	return (dispatch) => {
@@ -17,8 +20,9 @@ function login(email, password) {
 			(data) => {
 				var { data } = data
 				if (data.success) {
-					store.set("user", data.data) //sets local storage
+					connectSocket(data.data.token) //open websocket connection
 					store.set("token", data.data.token)
+					store.set("timestamp", moment(new Date()).unix()) //sets timestamp of token
 					dispatch({ //set user in state
 						type: ADD_AUTH_OBJECT,
 						user: data.data
@@ -37,8 +41,10 @@ function login(email, password) {
 }
 
 function logout() {
-	store.remove("user")
+	disconnectSocket() //close websocket connection
+	//remove token and timestamp
 	store.remove("token")
+	store.remove("timestamp")
 	return [{
 		type: REMOVE_AUTH_OBJECT
 	},
