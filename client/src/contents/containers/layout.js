@@ -28,7 +28,7 @@ class HiddenLayout extends React.Component {
 			<div>
 
 				{/*small screens*/}
-				<MediaQuery maxWidth={992}>
+				<MediaQuery maxWidth={991}>
 					<Sidebar.Pushable as={Segment}>
 			          <Sidebar as={Menu} animation='push' width='thin' visible={this.state.visible} icon='labeled' vertical inverted>
 			            {linkRenderer(this.state.links, this.props.user)}
