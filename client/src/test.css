@@ -37,7 +37,6 @@ panel.error{
 }
 
 .CircularProgressbar .CircularProgressbar-path {
-  stroke: #3e98c7;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.5s ease 0s;
 }
@@ -51,4 +50,36 @@ panel.error{
   font-size: 20px;
   dominant-baseline: middle;
   text-anchor: middle;
+}
+
+.CircularProgressbar.oneQuarter .CircularProgressbar-path {
+  stroke: #d9534f;
+}
+
+.CircularProgressbar.oneQuarter .CircularProgressbar-text {
+  fill: #d9534f;
+}
+
+.CircularProgressbar.twoQuarter .CircularProgressbar-path {
+  stroke: #f0ad4e;
+}
+
+.CircularProgressbar.twoQuarter .CircularProgressbar-text {
+  fill: #f0ad4e;
+}
+
+.CircularProgressbar.threeQuarter .CircularProgressbar-path {
+  stroke: #5bc0de;
+}
+
+.CircularProgressbar.threeQuarter .CircularProgressbar-text {
+  fill: #5bc0de;
+}
+
+.CircularProgressbar.fourQuarter .CircularProgressbar-path {
+  stroke: #5cb85c;
+}
+
+.CircularProgressbar.fourQuarter .CircularProgressbar-text {
+  fill: #5cb85c;
 }

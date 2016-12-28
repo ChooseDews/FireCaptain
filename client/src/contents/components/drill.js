@@ -1,7 +1,7 @@
 import React from "react";
-import CircularProgressbar from 'react-circular-progressbar';
 import { Segment, Grid } from 'semantic-ui-react'
 import Moment from 'react-moment';
+import ProgressCircle from "./progresscircle"
 
 
 class Drill extends React.Component {
@@ -13,7 +13,8 @@ class Drill extends React.Component {
 			            <Grid.Row>
                       <Grid.Column mobile={4} only={'mobile'}></Grid.Column>
 			                <Grid.Column mobile={8} tablet={4} computer={2}>
-			                    <CircularProgressbar percentage={this.props.progress} /> </Grid.Column>
+			                    <ProgressCircle percentage={50} />
+			                </Grid.Column>
 			                <Grid.Column mobile={16} tablet={12} computer={10} verticalAlign={"middle"}>
 											 <h2 className="ui header">
 											 {this.props.school} <small className="grey-text"> <Moment format="MMM Do YYYY @ h:m a"></Moment></small>

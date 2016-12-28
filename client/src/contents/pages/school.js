@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router"
 import { Grid, Image, Header, Button, Form, Segment, Search } from 'semantic-ui-react'
-import Drill from '../components/drill';
+import { Drill } from '../components';
 
 
 export default class School extends React.Component {
