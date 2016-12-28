@@ -23,7 +23,7 @@ const routes = (
 	  <Route path="/" component={Layout}>
 	    <IndexRoute component={Home} />
 	    <Route path="/about" component={IsDistrict(About)} />
-	    <Route path="/schools" component={IsSudo(Schools)} />
+	    <Route path="/schools" component={IsDistrict(Schools)} />
 	  </Route>
 	  <Route path="/login" component={IsNotLoggedIn(Login)} />
 
