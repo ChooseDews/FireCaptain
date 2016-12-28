@@ -18,7 +18,9 @@ $RECYCLE.BIN/
 bower_components/
 node_modules/
 npm-debug.log
-client/dist
+client/dist/*
+client/dist/app.css
+
 
 # Windows shortcuts
 *.lnk
@@ -51,3 +53,5 @@ client/dist
 Network Trash Folder
 Temporary Items
 .apdisk
+
+client/dist/app.css
