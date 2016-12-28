@@ -11,18 +11,18 @@ export default class Schools extends React.Component {
 					<Search aligned={"right"} placeholder={"Search Schools"}/>
 				<Segment.Group>
 					<Segment>
-						<Grid columns={12}>
-							<Grid.Column computer={4} mobile={6}>
+						<Grid columns='equal'>
+							<Grid.Column>
 								<b>
 									Chapel Hill High School
 								</b>
 							</Grid.Column>
-							<Grid.Column computer={4} mobile={6}>
+							<Grid.Column only={"computer"}>
 								Last Drill <b>
 								Saturday July 2nd
 							</b>
 						</Grid.Column>
-						<Grid.Column computer={4} only={"computer"}>
+						<Grid.Column only={"computer"}>
 							Next Drill <b>
 							Monday March 31st
 						</b>
@@ -30,18 +30,18 @@ export default class Schools extends React.Component {
 				</Grid>
 			</Segment>
 			<Segment>
-				<Grid columns={3}>
+				<Grid columns='equal'>
 					<Grid.Column>
 						<b>
 							East Chapel Hill High School
 						</b>
 					</Grid.Column>
-					<Grid.Column>
+					<Grid.Column only={"computer"}>
 						Last Drill <b>
 						Saturday July 2nd
 					</b>
 				</Grid.Column>
-				<Grid.Column>
+				<Grid.Column only={"computer"}>
 					Next Drill <b>
 					Monday March 31st
 				</b>
@@ -49,18 +49,18 @@ export default class Schools extends React.Component {
 		</Grid>
 	</Segment>
 	<Segment>
-		<Grid columns={3}>
+		<Grid columns='equal'>
 			<Grid.Column>
 				<b>
 					Carrboro High School
 				</b>
 			</Grid.Column>
-			<Grid.Column>
+			<Grid.Column only={"computer"}>
 				Last Drill <b>
 				Saturday July 2nd
 			</b>
 		</Grid.Column>
-		<Grid.Column>
+		<Grid.Column only={"computer"}>
 			Next Drill <b>
 			Monday March 31st
 		</b>
