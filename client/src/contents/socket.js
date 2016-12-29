@@ -1,29 +1,33 @@
 import io from 'socket.io-client';
 import { getToken } from "./token"
+import storeHolder from "./store"
+import { socketStatusActions } from "./actions"
 
-const createSocketInstance = (token = getToken()) => { //creates a new socket instance
-	let socket = io.connect(window.location.protocol + "//" + window.location.host, {
+export let socket = null; //creates socket variable
+
+export const createSocketInstance = (token = getToken()) => { //creates a new socket instance
+	let localSocketInstance = io.connect(window.location.protocol + "//" + window.location.host, {
 		query: "token=" + token
 	})
 
-	socket.on("connect", () => {
-		//the token was valid
+	localSocketInstance.on("connect", () => {
+		storeHolder.store.dispatch(socketStatusActions.setSocketStatusUp())
 	})
 
-	socket.on("error", (msg) => {
+	localSocketInstance.on("error", (msg) => {
 		if (msg.code == "invalid_token") {
-			//the token was invalid
+			storeHolder.store.dispatch(socketStatusActions.setSocketStatusDown())
 		}
 	})
 
-	socket.on("disconnect", () => {
-		alert("goodbye")
+	localSocketInstance.on("disconnect", () => {
+		storeHolder.store.dispatch(socketStatusActions.setSocketStatusDown())
 	})
-	
-	return socket
-}
 
-let socket = createSocketInstance() //initial socket instance
+	socket = localSocketInstance
+	
+	return localSocketInstance
+}
 
 export function disconnectSocket() {
 	socket.disconnect()

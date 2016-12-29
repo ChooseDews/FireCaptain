@@ -8,7 +8,7 @@ import { fromJS } from "immutable"
 
 import routes from './contents/routes';
 import storeHolder from "./contents/store";
-import { socket } from "./contents/socket"
+import { createSocketInstance } from "./contents/socket"
 
 import { getToken } from "./contents/token"
 
@@ -27,6 +27,10 @@ let loadApp = (response) => {
 	storeHolder.initializeStore(initialState) //creates initial store
 
 	const store = storeHolder.store //gets store from storeCreator object
+
+	window.store = store
+
+	const socket = createSocketInstance()
 
 	const history = syncHistoryWithStore(browserHistory, store) //create history that is synced with redux
 
