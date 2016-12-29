@@ -1,19 +1,29 @@
 import io from 'socket.io-client';
 import { getToken } from "./token"
 
-export let socket = io.connect(window.location.protocol + "//" + window.location.host, {
-	query: "token=" + getToken()
-})
+const createSocketInstance = (token = getToken()) => { //creates a new socket instance
+	let socket = io.connect(window.location.protocol + "//" + window.location.host, {
+		query: "token=" + token
+	})
 
-socket.on("connect", function() {
-	//the token was valid
-})
+	socket.on("connect", () => {
+		//the token was valid
+	})
 
-socket.on("error", function(msg) {
-	if (msg.code == "invalid_token") {
-		//the token was invalid
-	}
-})
+	socket.on("error", (msg) => {
+		if (msg.code == "invalid_token") {
+			//the token was invalid
+		}
+	})
+
+	socket.on("disconnect", () => {
+		alert("goodbye")
+	})
+	
+	return socket
+}
+
+let socket = createSocketInstance() //initial socket instance
 
 export function disconnectSocket() {
 	socket.disconnect()
@@ -21,9 +31,7 @@ export function disconnectSocket() {
 
 export function connectSocket(token) {
 	if (!socket.connected) {
-		socket = io.connect(window.location.protocol + "//" + window.location.host, {
-			query: "token=" + token
-		})
+		socket = createSocketInstance(token)
 	}
 }
 

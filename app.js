@@ -15,7 +15,7 @@ var http = require('http');
 var app = express();
 var server = http.createServer(app);
 
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {'pingInterval': 4000, 'pingTimeout': 10000}); //this may need to be changed to something less frequent
 var redis = require('redis').createClient;
 var adapter = require('socket.io-redis');
 var pub = redis(config.redis.port, config.redis.host, { auth_pass: config.redis.password, return_buffers: true });
