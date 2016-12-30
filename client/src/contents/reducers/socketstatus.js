@@ -3,7 +3,7 @@ import {
 	SET_SOCKET_STATUS_UP
 } from "../constants"
 
-const socketStatus = (state = false, action) => {
+const socketStatus = (state = {}, action) => {
 	switch(action.type) {
 		case SET_SOCKET_STATUS_UP: {
 			return true
