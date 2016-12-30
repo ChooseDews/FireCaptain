@@ -1,6 +1,6 @@
 //http wrapper for handling auth
 import * as axios from "axios"
-import storeHolder from "../store"
+import store from "../store"
 import { replace } from 'react-router-redux'
 
 const mainUrl = "" //base url for routes
@@ -20,7 +20,7 @@ const errorHandler = (error) => { //handler for unauthorized or other errors
 }
 
 const makeConfig = (headers) => { //takes in provided headers and makes axios config object
-	let token = storeHolder.store.getState().token //get jwt token
+	let token = store.getState().token //get jwt token
 	if (token != null) { //if token exists then add it to headers
 		headers = {
 			"x-access-token": token,

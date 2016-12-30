@@ -7,30 +7,21 @@ import { Socket } from 'react-socket-io';
 import { fromJS } from "immutable"
 
 import routes from './contents/routes';
-import storeHolder from "./contents/store";
-import { createSocketInstance } from "./contents/socket"
+import store from "./contents/store";
+import { socket } from "./contents/socket"
 
 import { getToken } from "./contents/token"
 
-let loadApp = (response) => {
+import { authActions, tokenActions } from "./contents/actions"
 
-	let initialState = {} //initial state of store
+let loadApp = (response) => {
 
 	if (!response.response) { //if the user data was passed successfully
 		let { data } = response
-		initialState = {
-			token: getToken(),
-			user: fromJS(data.data) //set user data to an immutable object
-		}
+
+		//set initial state with user credentials
+		store.dispatch([authActions.addAuthObject(data.data), tokenActions.setJwtToken(getToken())])
 	}
-
-	storeHolder.initializeStore(initialState) //creates initial store
-
-	const store = storeHolder.store //gets store from storeCreator object
-
-	window.store = store
-
-	const socket = createSocketInstance()
 
 	const history = syncHistoryWithStore(browserHistory, store) //create history that is synced with redux
 

@@ -31,7 +31,7 @@ class HiddenSocketError extends React.Component {
 	  				loading: false
 	  			})
   			}
-  		}, 10000)
+  		}, 15000)
   	}
     return (
 		<div ref="componentRef">

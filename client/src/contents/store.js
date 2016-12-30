@@ -13,24 +13,13 @@ const mainReducer = combineReducers({
 
 const middleware = routerMiddleware(browserHistory)
 
-//creates javascript class for holding the store and passing it around the application
-function storeCreator() {
-	this.store = {}
-}
-
-storeCreator.prototype.initializeStore = function(initialState) {
-	const store = createStore(
-	  mainReducer,
-	  initialState,
-	  compose(
-	  	applyMiddleware(middleware),
-	  	applyMiddleware(thunk),
-	  	applyMiddleware(multi)
-	  	)
+const store = createStore(
+	mainReducer,
+	compose(
+		applyMiddleware(middleware),
+		applyMiddleware(thunk),
+		applyMiddleware(multi)
 	)
-	this.store = store
-}
+)
 
-const storeHolder = new storeCreator() //instance of storeholder
-
-export default storeHolder
+export default store
