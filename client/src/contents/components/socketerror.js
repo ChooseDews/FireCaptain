@@ -42,13 +42,13 @@ class HiddenSocketError extends React.Component {
 		}
   		this.timer = setTimeout(() => {
   			this.turnOffLoading()
-  		}, 3000)
+  		}, 15000)
   	}
 
   	if (this.props.socketStatus && typeof(this.props.socketStatus) == "boolean") { //if the connection is up
   		if (this.state.loading) {
-			this.visible = false
-		}
+  			this.visible = false
+  		}
   	}
 
 
