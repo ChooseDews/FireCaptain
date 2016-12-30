@@ -1,7 +1,6 @@
 import { http } from "../util"
 import store from "store2"
 import moment from "moment"
-import io from 'socket.io-client';
 
 import {
 	ADD_AUTH_OBJECT,
@@ -23,20 +22,7 @@ function login(email, password) {
 					data
 				} = data
 				if (data.success) {
-					/*
-					this is a hack to change the jwt token in the query
-					when the bug is fixed the command will be this:
-					socket.io.opts.query = "token=" + data.data.token
-					*/
-					socket.io = new io.Manager(window.location.protocol + "//" + window.location.host, {
-						query: "token=" + data.data.token,
-						'reconnection': true,
-						'reconnectionDelay': 1000,
-						'reconnectionDelayMax': 5000,
-						'reconnectionAttempts': 5
-					});
-
-					socket.connect() //open websocket connection
+					socket.openConnection(data.data.token) //reconnects socket
 					store.set("token", data.data.token)
 					store.set("timestamp", moment(new Date()).unix()) //sets timestamp of token
 					dispatch({ //set user in state
@@ -57,21 +43,8 @@ function login(email, password) {
 }
 
 function logout() {
-	/*
-	this is a hack to change the jwt token in the query
-	when the bug is fixed the command will be this:
-	socket.io.opts.query = "token=" + data.data.token
-	*/
-	socket.io = new io.Manager(window.location.protocol + "//" + window.location.host, {
-		query: "token=" + null,
-		'reconnection': true,
-		'reconnectionDelay': 1000,
-		'reconnectionDelayMax': 5000,
-		'reconnectionAttempts': 5
-	});
-
-	socket.disconnect() //close websocket connection
-		//remove token and timestamp
+	socket.closeConnection() //close socket connection
+	//remove token and timestamp
 	store.remove("token")
 	store.remove("timestamp")
 	return [{

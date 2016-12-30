@@ -6,15 +6,7 @@ class HiddenSocketError extends React.Component {
   constructor() {
   	super()
   	this.state = {
-  		loading: true,
-  		socketStatus: true
-  	}
-  }
-  componentWillReceiveProps(props) {
-  	if (this.state.loading) { //this makes the error page not go away even if internet returns
-  		this.setState({
-	  		socketStatus: props.socketStatus
-	  	})
+  		loading: true
   	}
   }
   reload() {
@@ -35,7 +27,7 @@ class HiddenSocketError extends React.Component {
   	}
     return (
 		<div ref="componentRef">
-			{!this.state.socketStatus && !(this.props.socketStatus == undefined)?
+			{!this.props.socketStatus || !this.state.loading ?
 				<Dimmer
 		          active={true}
 		          page
