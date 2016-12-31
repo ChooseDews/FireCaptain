@@ -34,63 +34,7 @@ export default class MakeSchool extends React.Component {
 		this.state = {
 			zonesActiveIndex: -1,
 			roomsActiveIndex: -1,
-			zones: [{
-				id: 1,
-				name: "zone a",
-				rooms: [{
-					id: 1,
-					name: "room a",
-					periods: [1,3,4]
-				},
-				{
-					id: 2,
-					name: "room b",
-					periods: [1,2,3]
-				},
-				{
-					id: 3,
-					name: "room c",
-					periods: [1,4]
-				}]
-			},
-			{
-				id: 2,
-				name: "zone b",
-				rooms: [{
-					id: 1,
-					name: "room a",
-					periods: [1,4]
-				},
-				{
-					id: 2,
-					name: "room b",
-					periods: [4]
-				},
-				{
-					id: 3,
-					name: "room c",
-					periods: [1]
-				}]
-			},
-			{
-				id: 3,
-				name: "zone c",
-				rooms: [{
-					id: 1,
-					name: "room a",
-					periods: [3,4]
-				},
-				{
-					id: 2,
-					name: "room b",
-					periods: [5]
-				},
-				{
-					id: 3,
-					name: "room c",
-					periods: [4,5,6]
-				}]
-			}]
+			zones: []
 		}
 	}
 	handleZoneTitleClick(e, i) {
