@@ -201,6 +201,21 @@ export default class MakeSchool extends React.Component {
 
 								<div>
 
+									{self.state.zones[self.state.zonesActiveIndex].rooms.length == 0?
+				<Form.Field>
+					<Message info>
+						<Message.Header>There are currently no rooms!</Message.Header>
+						<p>Click on the "Add Room" button to add a room.</p>
+				</Message>
+			</Form.Field>
+				:
+				null
+			}
+
+			{self.state.zones[self.state.zonesActiveIndex].rooms.length > 0?
+
+
+
 
 									<Table celled>
 										 <Table.Header>
@@ -285,6 +300,10 @@ export default class MakeSchool extends React.Component {
 
 																		</Table.Body>
 														 </Table>
+
+														 :
+														 null
+														 }
 
 
 
