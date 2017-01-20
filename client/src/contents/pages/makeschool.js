@@ -199,82 +199,125 @@ export default class MakeSchool extends React.Component {
 								</Form.Field>
 
 
+								<div>
+
+									{self.state.zones[self.state.zonesActiveIndex].rooms.length == 0?
+				<Form.Field>
+					<Message info>
+						<Message.Header>There are currently no rooms!</Message.Header>
+						<p>Click on the "Add Room" button to add a room.</p>
+				</Message>
+			</Form.Field>
+				:
+				null
+			}
+
+			{self.state.zones[self.state.zonesActiveIndex].rooms.length > 0?
 
 
-								 <Accordion activeIndex={self.state.roomsActiveIndex} onTitleClick={self.handleRoomTitleClick.bind(self)}>
+
+
+									<Table celled>
+										 <Table.Header>
+											 <Table.Row>
+												 <Table.HeaderCell>Name</Table.HeaderCell>
+												 <Table.HeaderCell>Periods</Table.HeaderCell>
+													 <Table.HeaderCell>Remove</Table.HeaderCell>
+
+											 </Table.Row>
+										 </Table.Header>
+											 <Table.Body>
+
 																    	{self.state.zones[self.state.zonesActiveIndex].rooms.map((room) => {
 																    		return ([
-																    			<Accordion.Title key={room.id}>
-																			      <Icon name='dropdown' />
-																			      {room.name}
-																			      <Button size="mini" icon='remove' color="red" floated="right" style={{marginTop: "-4px", marginRight: "-6px"}} onClick={(e) => {
-																			      	e.stopPropagation()
-																			      	let newZones = self.state.zones
-																			      	newZones.forEach((newZone) => {
-																			      		if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
-																			      			newZone.rooms = newZone.rooms.filter((newRoom) => {
-																			      				return newRoom.id != room.id
-																			      			})
-																			      		}
-																			      	})
-																			      	self.setState({
-																			      		zones: newZones
-																			      	})
-																			      }} />
-																			    </Accordion.Title>,
-																			    <Accordion.Content style={{paddingLeft: "1em"}}>
-
-																			    <Form.Field>
-																			      <label>Room Name</label>
-																			      <input placeholder='Room Name' name={"roomname" + room.id} value={room.name} onChange={(e) => {
-								 													let newZones = self.state.zones
-																			      	newZones.forEach((newZone) => {
-																			      		if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
-																			      			newZone.rooms.forEach((newRoom) => {
-																			      				if (newRoom.id == room.id) {
-																			      					newRoom.name = e.target.value
-																			      				}
-																			      			})
-																			      		}
-																			      	})
-								 													self.setState({
-								 														zones: newZones
-								 													})
-																			      }} />
-
-																			    </Form.Field>
-
-																					<Form.Field>
-																						<label>Periods</label>
-
-																							<Dropdown name={room.id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
-									 													let newZones = self.state.zones
-																				      	newZones.forEach((newZone) => {
-																				      		if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
-																				      			newZone.rooms.forEach((newRoom) => {
-																				      				if (newRoom.id == room.id) {
-																				      					newRoom.periods = i.value
-																				      				}
-																				      			})
-																				      		}
-																				      	})
-									 													self.setState({
-									 														zones: newZones
-									 													})
-																				      }} />
-																					</Form.Field>
 
 
 
+				 <Table.Row>
+				           <Table.Cell width={7}> <Form.Field>
+											<input placeholder='Room Name' name={"roomname" + room.id} value={room.name} onChange={(e) => {
+										let newZones = self.state.zones
+												newZones.forEach((newZone) => {
+													if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+														newZone.rooms.forEach((newRoom) => {
+															if (newRoom.id == room.id) {
+																newRoom.name = e.target.value
+															}
+														})
+													}
+												})
+										self.setState({
+											zones: newZones
+										})
+											}} />
+
+										</Form.Field></Table.Cell>
+									<Table.Cell width={8}>	<Form.Field>
+
+												 <Dropdown name={room.id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
+											 let newZones = self.state.zones
+													 newZones.forEach((newZone) => {
+														 if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+															 newZone.rooms.forEach((newRoom) => {
+																 if (newRoom.id == room.id) {
+																	 newRoom.periods = i.value
+																 }
+															 })
+														 }
+													 })
+											 self.setState({
+												 zones: newZones
+											 })
+												 }} />
+										 </Form.Field></Table.Cell>
+									 <Table.Cell width={1} textAlign={'center'}>
+
+										 <Button size="mini" icon='remove' color="red" onClick={(e) => {
+									 																			      	e.stopPropagation()
+									 																			      	let newZones = self.state.zones
+									 																			      	newZones.forEach((newZone) => {
+									 																			      		if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+									 																			      			newZone.rooms = newZone.rooms.filter((newRoom) => {
+									 																			      				return newRoom.id != room.id
+									 																			      			})
+									 																			      		}
+									 																			      	})
+									 																			      	self.setState({
+									 																			      		zones: newZones
+									 																			      	})
+									 																			      }} />
+
+
+
+									 </Table.Cell>
+				         </Table.Row>
 
 
 
 
-																			    </Accordion.Content>
 																    			])
 																    	})}
 
-																	  </Accordion></div>
+																		</Table.Body>
+														 </Table>
+
+														 :
+														 null
+														 }
+
+
+
+
+
+
+
+
+														 </div>
+
+
+
+
+																	 </div>
 					])
 				}(this)
 			}
