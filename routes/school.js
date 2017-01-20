@@ -8,6 +8,19 @@ module.exports = function (app, router, services) {
   });
 
 
+	router.get('/map', function(req,res){
+		services.map.get(req.school._id).then(function(map){
+			res.send(map);
+		});
+	});
+
+	router.post('/map', function(req,res){
+		services.map.update(req.school._id, req.body.map).then(function(map){
+			res.send(map);
+		});
+	});
+
+
 
 
 

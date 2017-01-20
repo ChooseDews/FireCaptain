@@ -1,7 +1,9 @@
 import React from "react"
 import { Button, Checkbox, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown } from 'semantic-ui-react'
 import * as _ from "lodash"
+import { connect } from "react-redux"
 
+import { teacherActions, mapActions } from "../actions"
 
 
 //temp variable for what a schools period setup would look like
@@ -32,7 +34,7 @@ const options = [{
 }]
 
 
-export default class MakeSchool extends React.Component {
+class HiddenMakeSchool extends React.Component {
 	constructor() {
 		super()
 		this.state = {
@@ -69,6 +71,8 @@ export default class MakeSchool extends React.Component {
 }
 	submit(e) {
 		e.preventDefault()
+		mapActions.updateMap(this.state.zones)
+		console.log(mapActions.updateMap);
 		console.log(this.state.zones)
 	}
 
@@ -336,3 +340,22 @@ export default class MakeSchool extends React.Component {
 			)
 	}
 }
+
+
+const MakeSchool = connect(
+	(state) => {
+		return {
+			teachers: state.teachers
+		}
+	},
+	(dispatch) => {
+		return {
+			updateMap: (map) => {
+				console.log(this.state.zones);
+				dispatch(mapActions.updateMap(this.state.zones))
+			}
+		}
+	}
+	)(HiddenMakeSchool)
+
+export default MakeSchool

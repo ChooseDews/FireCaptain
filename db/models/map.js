@@ -20,5 +20,22 @@ module.exports = function(mongoose) {
   });
 
 
+  model.schema.statics.create = function(school, mapObject) {
+      var map = new this({
+          school: school,
+          zones: mapObject
+      });
+      return map.save();
+  };
+
+
+  model.schema.statics.update = function(mapId, mapObject){
+      return this.findById(mapId).then(function(map){
+          map.zones = map;
+          return map.save();
+      });
+  };
+
+
   return model;
 };
