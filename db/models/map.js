@@ -10,7 +10,8 @@ module.exports = function(mongoose) {
         enabled: Boolean,
         rooms: [{
             name: String,
-            enabled: Boolean
+            enabled: Boolean,
+            periods: [String]
         }]
     }],
     school: {

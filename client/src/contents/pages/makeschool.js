@@ -5,31 +5,33 @@ import { connect } from "react-redux"
 
 import { teacherActions, mapActions } from "../actions"
 
+import { http } from "../util"
+
 
 //temp variable for what a schools period setup would look like
 
 const options = [{
-	value: 1,
+	value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
 	text: "period 1"
 },
 {
-	value: 2,
+	value: "37d07ef8-b352-4cf5-8895-02e76f466420",
 	text: "period 2"
 },
 {
-	value: 3,
+	value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
 	text: "period 3"
 },
 {
-	value: 4,
+	value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
 	text: "period 4"
 },
 {
-	value: 5,
+	value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
 	text: "period 5"
 },
 {
-	value: 6,
+	value: "db760346-801b-4cdc-adb4-4270db020e64",
 	text: "period 6"
 }]
 
@@ -44,6 +46,16 @@ class HiddenMakeSchool extends React.Component {
 			activeZone: null
 		}
 	}
+	componentDidMount() {
+		http.get("/api/school/map").then((data) => {
+			console.log(data)
+			this.setState({
+				zones: data.data.zones,
+				activeZone: data.data.zones[0]._id,
+				zonesActiveIndex: 0
+			})
+		})
+	}
 	handleZoneTitleClick(e, i) {
 		this.setState({
 			zonesActiveIndex: this.state.zonesActiveIndex === i ? -1 : i,
@@ -57,22 +69,20 @@ class HiddenMakeSchool extends React.Component {
 	handleMenuClick(e, {name}){
 		this.setState({
 			activeZone: name,
-			zonesActiveIndex: _.findKey(this.state.zones, {id: name})
+			zonesActiveIndex: _.findKey(this.state.zones, {_id: name})
 		});
 	}
 	generateUUID() {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
+		return (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
+    s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
 }
 	submit(e) {
 		e.preventDefault()
-		mapActions.updateMap(this.state.zones)
-		console.log(mapActions.updateMap);
+		http.post("/api/school/map", {
+			map: this.state.zones
+		}).then(function(i){
+			console.log(i);
+		})
 		console.log(this.state.zones)
 	}
 
@@ -81,26 +91,8 @@ class HiddenMakeSchool extends React.Component {
 		return (
 			<div>
 				<Form onSubmit={this.submit.bind(this)}>
-					<h2>Make School</h2>
-
-					<h3>Main Info</h3>
-
-
-				    <Form.Field>
-				      <label>Name</label>
-				      <input placeholder='Name' name="name" />
-				    </Form.Field>
-				    <Form.Field>
-				      <label>More Info</label>
-				      <input placeholder='more info' name="moreinfo" />
-				    </Form.Field>
-				    <Form.Field>
-				      <Checkbox label='random form stuff' name="moreinfocheckbox" />
-				    </Form.Field>
-
-
-						<br />
-						<br />
+					<h2>School Map</h2>
+					<br/><br/>
 
 
 		<Menu attached='top' tabular>
@@ -109,18 +101,18 @@ class HiddenMakeSchool extends React.Component {
 
 			return ([
 
-				<Menu.Item name={zone.id} active={this.state.activeZone == zone.id} onClick={this.handleMenuClick.bind(this)}>
+				<Menu.Item name={zone._id} active={this.state.activeZone == zone._id} onClick={this.handleMenuClick.bind(this)}>
 					{zone.name}
 					<Button size="mini" className="closeButton" icon='remove' color="red" floated="right" onClick={() => {
 						let newZones = this.state.zones
 						if(newZones.length == 1) return false;
 									      	newZones = newZones.filter((newZone) => {
-									      		return newZone.id != zone.id
+									      		return newZone._id != zone._id
 									      	})
 									      	this.setState({
 									      		zones: newZones,
 														zonesActiveIndex: 0,
-														activeZone: newZones[0].id
+														activeZone: newZones[0]._id
 									      	})
 				}}/>
 				</Menu.Item>
@@ -134,14 +126,14 @@ class HiddenMakeSchool extends React.Component {
             <Menu.Item name='new-tab' onClick={() => {
 							let newZones = this.state.zones
 							newZones.push({
-							id: this.generateUUID(),
+							_id: this.generateUUID(),
 							name: "New Zone",
 							rooms: []
 						})
 						this.setState({
 							zones: newZones,
 							zonesActiveIndex: newZones.length-1,
-							activeZone: newZones[newZones.length-1].id
+							activeZone: newZones[newZones.length-1]._id
 						})
 						}}>
               <Icon name='add' />
@@ -175,7 +167,7 @@ class HiddenMakeSchool extends React.Component {
 
 								<Form.Field>
 									<label>Zone Name</label>
-									<input placeholder='Zone Name' name={self.state.zones[self.state.zonesActiveIndex].id} value={self.state.zones[self.state.zonesActiveIndex].name} onChange={(e) => {
+									<input placeholder='Zone Name' name={self.state.zones[self.state.zonesActiveIndex]._id} value={self.state.zones[self.state.zonesActiveIndex].name} onChange={(e) => {
 										self.state.zones[self.state.zonesActiveIndex].name = e.target.value;
 										self.setState({
 											zones: self.state.zones
@@ -191,7 +183,7 @@ class HiddenMakeSchool extends React.Component {
 								<Form.Field>
 									<Button type="button" content='Add room' icon='plus' labelPosition='left' onClick={() => {
 									self.state.zones[self.state.zonesActiveIndex].rooms.push({
-										id: self.generateUUID(),
+										_id: self.generateUUID(),
 										name: "New Room",
 										periods: []
 									});
@@ -239,12 +231,12 @@ class HiddenMakeSchool extends React.Component {
 
 				 <Table.Row>
 				           <Table.Cell width={7}> <Form.Field>
-											<input placeholder='Room Name' name={"roomname" + room.id} value={room.name} onChange={(e) => {
+											<input placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
 										let newZones = self.state.zones
 												newZones.forEach((newZone) => {
-													if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+													if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
 														newZone.rooms.forEach((newRoom) => {
-															if (newRoom.id == room.id) {
+															if (newRoom._id == room._id) {
 																newRoom.name = e.target.value
 															}
 														})
@@ -258,12 +250,12 @@ class HiddenMakeSchool extends React.Component {
 										</Form.Field></Table.Cell>
 									<Table.Cell width={8}>	<Form.Field>
 
-												 <Dropdown name={room.id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
+												 <Dropdown name={room._id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
 											 let newZones = self.state.zones
 													 newZones.forEach((newZone) => {
-														 if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+														 if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
 															 newZone.rooms.forEach((newRoom) => {
-																 if (newRoom.id == room.id) {
+																 if (newRoom._id == room._id) {
 																	 newRoom.periods = i.value
 																 }
 															 })
@@ -280,9 +272,9 @@ class HiddenMakeSchool extends React.Component {
 									 																			      	e.stopPropagation()
 									 																			      	let newZones = self.state.zones
 									 																			      	newZones.forEach((newZone) => {
-									 																			      		if (newZone.id == self.state.zones[self.state.zonesActiveIndex].id) {
+									 																			      		if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
 									 																			      			newZone.rooms = newZone.rooms.filter((newRoom) => {
-									 																			      				return newRoom.id != room.id
+									 																			      				return newRoom._id != room._id
 									 																			      			})
 									 																			      		}
 									 																			      	})
@@ -332,7 +324,7 @@ class HiddenMakeSchool extends React.Component {
 
 
 					  <Form.Field>
-					  	<Button type="submit" floated="right" primary>Submit</Button>
+					  	<Button type="submit" floated="right" primary>Save</Button>
 					  </Form.Field>
 
 				</Form>
