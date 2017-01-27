@@ -2,36 +2,44 @@ import React from "react"
 import { Button, Checkbox, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown } from 'semantic-ui-react'
 import * as _ from "lodash"
 import { connect } from "react-redux"
+import * as FireAnalytics from "FireAnalytics"
 
 import { teacherActions, mapActions } from "../actions"
 
 import { http } from "../util"
 
 
+
 //temp variable for what a schools period setup would look like
 
 const options = [{
 	value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
+	key: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
 	text: "period 1"
 },
 {
 	value: "37d07ef8-b352-4cf5-8895-02e76f466420",
+	key: "37d07ef8-b352-4cf5-8895-02e76f466420",
 	text: "period 2"
 },
 {
 	value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
+	key: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
 	text: "period 3"
 },
 {
 	value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
+	key: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
 	text: "period 4"
 },
 {
 	value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
+	key: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
 	text: "period 5"
 },
 {
 	value: "db760346-801b-4cdc-adb4-4270db020e64",
+	key: "db760346-801b-4cdc-adb4-4270db020e64",
 	text: "period 6"
 }]
 
@@ -43,17 +51,19 @@ class HiddenMakeSchool extends React.Component {
 			zonesActiveIndex: -1,
 			roomsActiveIndex: -1,
 			zones: [],
-			activeZone: null
+			activeZone: null,
+			rooms: 0
 		}
 	}
 	componentDidMount() {
 		http.get("/api/school/map").then((data) => {
-			console.log(data)
+
+
 			this.setState({
 				zones: data.data.zones,
 				activeZone: data.data.zones[0]._id,
 				zonesActiveIndex: 0
-			})
+			});
 		})
 	}
 	handleZoneTitleClick(e, i) {
@@ -97,11 +107,9 @@ class HiddenMakeSchool extends React.Component {
 
 		<Menu attached='top' tabular>
 			{this.state.zones.map((zone) => {
-
-
 			return ([
 
-				<Menu.Item name={zone._id} active={this.state.activeZone == zone._id} onClick={this.handleMenuClick.bind(this)}>
+				<Menu.Item key={zone._id} name={zone._id} active={this.state.activeZone == zone._id} onClick={this.handleMenuClick.bind(this)}>
 					{zone.name}
 					<Button size="mini" className="closeButton" icon='remove' color="red" floated="right" onClick={() => {
 						let newZones = this.state.zones
@@ -188,7 +196,7 @@ class HiddenMakeSchool extends React.Component {
 										periods: []
 									});
 											self.setState({
-												zones: self.state.zones,
+												zones: self.state.zones
 											})
 									}} />
 
@@ -229,7 +237,7 @@ class HiddenMakeSchool extends React.Component {
 
 
 
-				 <Table.Row>
+				 <Table.Row key={room._id}>
 				           <Table.Cell width={7}> <Form.Field>
 											<input placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
 										let newZones = self.state.zones
@@ -250,7 +258,7 @@ class HiddenMakeSchool extends React.Component {
 										</Form.Field></Table.Cell>
 									<Table.Cell width={8}>	<Form.Field>
 
-												 <Dropdown name={room._id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
+												 <Dropdown key={room._id+'-periods'} name={room._id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
 											 let newZones = self.state.zones
 													 newZones.forEach((newZone) => {
 														 if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
@@ -322,6 +330,17 @@ class HiddenMakeSchool extends React.Component {
 
 		<br/><br/>
 
+	<h4>Map Issues</h4>
+
+
+
+
+
+
+		<h4>Rooms {FireAnalytics.zone.countRooms(this.state.zones)}</h4>
+
+<br></br>
+
 
 					  <Form.Field>
 					  	<Button type="submit" floated="right" primary>Save</Button>
@@ -343,7 +362,6 @@ const MakeSchool = connect(
 	(dispatch) => {
 		return {
 			updateMap: (map) => {
-				console.log(this.state.zones);
 				dispatch(mapActions.updateMap(this.state.zones))
 			}
 		}
