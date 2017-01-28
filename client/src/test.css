@@ -7,6 +7,14 @@
     padding: 2px !important;
 }
 
+.addButton{
+  border-radius: 50% !important;
+    background-color: white !important;
+    color: black !important;
+    margin-left: 5px !important;
+    padding: 2px !important;
+}
+
 .closeButton:hover{
   background-color: red !important;
   color: white !important;
