@@ -7,13 +7,12 @@ module.exports = function(mongoose) {
     name: String,
     email: String,
     phone: Number,
-    zones: [{
-        name: String,
-        enabled: Boolean,
-        rooms: [{
-            name: String,
-            enabled: Boolean
-        }]
+    map: {
+      type: Schema.Types.ObjectId,
+      ref: 'Map'
+    },
+    periods: [{
+      name: String //_id will automatically be added for identification.
     }],
     district: {
       type: Schema.Types.ObjectId,
