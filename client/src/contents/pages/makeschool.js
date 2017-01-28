@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Checkbox, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown } from 'semantic-ui-react'
+import { Button, Checkbox, Loader, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown, Input, List, Modal} from 'semantic-ui-react'
 import * as _ from "lodash"
 import { connect } from "react-redux"
 import * as FireAnalytics from "FireAnalytics"
@@ -8,345 +8,367 @@ import { teacherActions, mapActions } from "../actions"
 
 import { http } from "../util"
 
-
-
 //temp variable for what a schools period setup would look like
 
-const options = [{
-	value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
-	key: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
-	text: "period 1"
-},
-{
-	value: "37d07ef8-b352-4cf5-8895-02e76f466420",
-	key: "37d07ef8-b352-4cf5-8895-02e76f466420",
-	text: "period 2"
-},
-{
-	value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
-	key: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
-	text: "period 3"
-},
-{
-	value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
-	key: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
-	text: "period 4"
-},
-{
-	value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
-	key: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
-	text: "period 5"
-},
-{
-	value: "db760346-801b-4cdc-adb4-4270db020e64",
-	key: "db760346-801b-4cdc-adb4-4270db020e64",
-	text: "period 6"
-}]
-
+const options = {
+	"ac357dee-6f09-4465-8c5f-5c8ecd214c84": {
+		value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
+		key: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
+		text: "period 1"
+	},
+	"37d07ef8-b352-4cf5-8895-02e76f466420": {
+		value: "37d07ef8-b352-4cf5-8895-02e76f466420",
+		key: "37d07ef8-b352-4cf5-8895-02e76f466420",
+		text: "period 2"
+	},
+	"aa1a0136-d2c0-44b3-aa17-a182e2bc3853": {
+		value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
+		key: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
+		text: "period 3"
+	},
+	"47dbb06f-c624-4a5a-bc71-37900c8d611b": {
+		value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
+		key: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
+		text: "period 4"
+	},
+	"8fd0578c-86d8-45c6-a38c-3a2b3fe125fa": {
+		value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
+		key: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
+		text: "period 5"
+	},
+	"db760346-801b-4cdc-adb4-4270db020e64": {
+		value: "db760346-801b-4cdc-adb4-4270db020e64",
+		key: "db760346-801b-4cdc-adb4-4270db020e64",
+		text: "period 6"
+	}
+}
 
 class HiddenMakeSchool extends React.Component {
 	constructor() {
 		super()
 		this.state = {
-			zonesActiveIndex: -1,
-			roomsActiveIndex: -1,
 			zones: [],
-			activeZone: null,
-			rooms: 0
+			activeZone: "1",
+			modalOpen: false,
+			currentRoom: {},
+			loading: true
 		}
 	}
 	componentDidMount() {
 		http.get("/api/school/map").then((data) => {
-
-
 			this.setState({
 				zones: data.data.zones,
 				activeZone: data.data.zones[0]._id,
-				zonesActiveIndex: 0
+				loading: false
 			});
 		})
 	}
-	handleZoneTitleClick(e, i) {
-		this.setState({
-			zonesActiveIndex: this.state.zonesActiveIndex === i ? -1 : i,
-		})
-	}
-	handleRoomTitleClick(e, i) {
-		this.setState({
-			roomsActiveIndex: this.state.roomsActiveIndex === i ? -1 : i,
-		})
-	}
-	handleMenuClick(e, {name}){
-		this.setState({
-			activeZone: name,
-			zonesActiveIndex: _.findKey(this.state.zones, {_id: name})
-		});
-	}
+
 	generateUUID() {
-		return (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
-    s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
-}
+		let a = (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
+		s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
+		return a()
+	}
+
 	submit(e) {
 		e.preventDefault()
 		http.post("/api/school/map", {
 			map: this.state.zones
 		}).then(function(i){
 			console.log(i);
+			alert("The school was updated.")
 		})
-		console.log(this.state.zones)
+
+		e.preventDefault();
 	}
 
+	modalClose() {
+		this.setState({
+			modalOpen: false
+		})
+	}
 
 	render() {
+
+		if (this.state.loading) { //if loading inital zone data
+			return (
+					<div>
+						<Form>
+						<h2>School Map</h2>
+						<br />
+						<Loader active inline='centered' size='massive' />
+						</Form>
+					</div>
+				)
+		}
+
+		//gets currently selected zone
+		let currentZone = undefined;
+		let index = 0;
+		if (this.state.zones.length > 0) {
+
+			index = _.findIndex(this.state.zones, (zone) => {
+				return zone._id == this.state.activeZone
+			})
+
+			currentZone = this.state.zones[index] || this.state.zones[0]
+		}
+
 		return (
 			<div>
 				<Form onSubmit={this.submit.bind(this)}>
 					<h2>School Map</h2>
-					<br/><br/>
+					<h3>Total Rooms: {FireAnalytics.zone.countRooms(this.state.zones)}</h3>
+					{FireAnalytics.zone.mapIssues(this.state.zones).length > 0?
+					<div>
+						<h3>Errors:</h3>
+						<List bulleted>
+							{FireAnalytics.zone.mapIssues(this.state.zones).map((issue, i) => {
+								return (
+									<List.Item key={i}>
+										{issue}
+									</List.Item>
+								)
+							})}
+						</List>
+					</div>
+					:null}
+					<br/>
 
-
-		<Menu attached='top' tabular>
-			{this.state.zones.map((zone) => {
-			return ([
-
-				<Menu.Item key={zone._id} name={zone._id} active={this.state.activeZone == zone._id} onClick={this.handleMenuClick.bind(this)}>
-					{zone.name}
-					<Button size="mini" className="closeButton" icon='remove' color="red" floated="right" onClick={() => {
-						let newZones = this.state.zones
-						if(newZones.length == 1) return false;
-									      	newZones = newZones.filter((newZone) => {
-									      		return newZone._id != zone._id
-									      	})
-									      	this.setState({
-									      		zones: newZones,
-														zonesActiveIndex: 0,
-														activeZone: newZones[0]._id
-									      	})
-				}}/>
-				</Menu.Item>
-
-			])
-
-			})}
-
-
-			<Menu.Menu position='right'>
-            <Menu.Item name='new-tab' onClick={() => {
-							let newZones = this.state.zones
-							newZones.push({
-							_id: this.generateUUID(),
-							name: "New Zone",
-							rooms: []
-						})
-						this.setState({
-							zones: newZones,
-							zonesActiveIndex: newZones.length-1,
-							activeZone: newZones[newZones.length-1]._id
-						})
-						}}>
-              <Icon name='add' />
-              Add Zone
-            </Menu.Item>
-          </Menu.Menu>
-
-
-		</Menu>
-
-		<Segment attached='bottom' padded>
-
-			{this.state.zones.length == 0?
-				<Form.Field>
-					<Message info>
-						<Message.Header>There are currently no zones!</Message.Header>
-						<p>Click on the "Add zone" button to add a zone.</p>
-				</Message>
-			</Form.Field>
-				:
-				null
-			}
-
-
-			{
-				function(self){
-					if(self.state.zonesActiveIndex < 0 || !self.state.zones[self.state.zonesActiveIndex]) return null;
-					return ([
-							<div>
-
-
-								<Form.Field>
-									<label>Zone Name</label>
-									<input placeholder='Zone Name' name={self.state.zones[self.state.zonesActiveIndex]._id} value={self.state.zones[self.state.zonesActiveIndex].name} onChange={(e) => {
-										self.state.zones[self.state.zonesActiveIndex].name = e.target.value;
-										self.setState({
-											zones: self.state.zones
-										})
+					<Menu attached='top' tabular>
+					{this.state.zones.length > 0? this.state.zones.map((zone) => {
+						return (
+								<Menu.Item key={zone._id} active={zone._id == currentZone._id} onClick={() => {
+									this.setState({
+										activeZone: zone._id
+									})
+								}}>
+									{zone.name}
+									<Button type="button" size="mini" className="closeButton" icon='remove' color="red" floated="right" onClick={() => {
+										let newZones = _.reject(this.state.zones, function(d){ return d._id === zone._id; });
+										if (newZones[0]) { //if this is not the last zone
+											this.setState({
+												activeZone: newZones[0]._id,
+												zones: newZones
+											})
+										} else { //if last zone
+											this.setState({
+												activeZone: -1,
+												zones: newZones
+											})
+										}
 									}} />
-								</Form.Field>
+								</Menu.Item>
+							)
+					}):
+					null
+					}
 
+						<Menu.Menu position='right'>
+							<Menu.Item name='new-tab' onClick={() => {
+								let newZones = this.state.zones
+								let id = this.generateUUID();
+								newZones.push({
+									_id: id,
+									name: "New Zone",
+									rooms: []
+								})
+								this.setState({
+									zones: newZones
+								})
+							}}>
+								<Icon name='add' />
+								Add Zone
+							</Menu.Item>
+						</Menu.Menu>
 
-								<Form.Field>
-									<label>Rooms</label>
-								</Form.Field>
+					</Menu>
 
-								<Form.Field>
-									<Button type="button" content='Add room' icon='plus' labelPosition='left' onClick={() => {
-									self.state.zones[self.state.zonesActiveIndex].rooms.push({
-										_id: self.generateUUID(),
+					{this.state.zones.length > 0?
+					<Segment attached='bottom'>
+						<div>
+							<Form.Field>
+								<label>Zone Name</label>
+								<input placeholder='Zone Name' name={currentZone._id} value={currentZone.name} onChange={(e) => {
+									let newZones = this.state.zones;
+									newZones[index].name = e.target.value
+									this.setState({
+										zones: newZones
+									})
+								}} />
+							</Form.Field>
+
+							<Form.Field>
+								<label>Rooms</label>
+							</Form.Field>
+
+							<Form.Field>
+								<Button type="button" content='Add room' icon='plus' labelPosition='left' onClick={() => {
+									let newZones = this.state.zones;
+									newZones[index].rooms.push({
+										_id: this.generateUUID(),
 										name: "New Room",
 										periods: []
 									});
-											self.setState({
-												zones: self.state.zones
-											})
-									}} />
+									this.setState({
+										zones: newZones
+									})
+								}} />
+							</Form.Field>
 
-								</Form.Field>
+							{currentZone.rooms.length > 0?
+							<Table celled>
+								<Table.Header>
+									<Table.Row>
+										<Table.HeaderCell>Name</Table.HeaderCell>
+										<Table.HeaderCell>Periods</Table.HeaderCell>
+										<Table.HeaderCell>Remove</Table.HeaderCell>
+									 </Table.Row>
+								</Table.Header>
+								
+								<Table.Body>
+									{currentZone.rooms.map((room, i) => {
+										return (
+											<Table.Row key={room._id}>
+												<Table.Cell>
+													<input data-key={i} placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
+														let newZones = this.state.zones;
+														let roomIndex = e.target.getAttribute("data-key");
+														newZones[index].rooms[roomIndex].name = e.target.value
+														this.setState({
+															zones: newZones
+														})
+													}} />
+												</Table.Cell>
+												<Table.Cell>
+													{room.periods.length > 0? room.periods.map((period) => {
+														return (
+															<Label key={options[period].key}>
+														        {options[period].text}
+														    </Label>
+															)
+													})
 
+													:
+														<span>There are no periods selected.</span>
+													}
+													<Button type="button" size="mini" className="addButton" icon='write' color="blue" floated="right" onClick={() => {
+														this.setState({
+															currentRoom: room,
+															modalOpen: true
+														})
+													}} />
+												</Table.Cell>
+												<Table.Cell>
+													<Button type="button" size="mini" icon='remove' color="red" onClick={(e) => {
+							 							let newZones = this.state.zones
+							 							newZones[index].rooms = newZones[index].rooms.filter((newRoom) => {
+									 						return newRoom._id != room._id
+									 					})
+							 							this.setState({
+							 								zones: newZones
+							 							})
+									 				}} />
+												</Table.Cell>
+											</Table.Row>
+											)
+									})}
+								</Table.Body>
+							</Table>
+							:
+							<Form.Field>
+								<Message info>
+									<Message.Header>There are currently no rooms!</Message.Header>
+									<p>Click on the "Add room" button to add a room.</p>
+								</Message>
+							</Form.Field>
+							}
+						</div>
+					</Segment>
 
-								<div>
+					:
 
-									{self.state.zones[self.state.zonesActiveIndex].rooms.length == 0?
-				<Form.Field>
-					<Message info>
-						<Message.Header>There are currently no rooms!</Message.Header>
-						<p>Click on the "Add Room" button to add a room.</p>
-				</Message>
-			</Form.Field>
-				:
-				null
-			}
+					<Form.Field>
+						<Message info>
+							<Message.Header>There are currently no zones!</Message.Header>
+							<p>Click on the "Add zone" button to add a zone.</p>
+						</Message>
+					</Form.Field>
+					}
 
-			{self.state.zones[self.state.zonesActiveIndex].rooms.length > 0?
+					<Button primary type="submit" floated="right" style={{marginBottom: "20px !important"}} onClick={this.submit.bind(this)}>Submit</Button>
+				</Form>
 
+				<Modal size="small" open={this.state.modalOpen} onClose={this.modalClose.bind(this)}>
+		          <Modal.Header>
+		            Update periods: {this.state.currentRoom.name}
+		          </Modal.Header>
+		          <Modal.Content>
+		            <List divided verticalAlign='middle'>
 
-
-
-									<Table celled>
-										 <Table.Header>
-											 <Table.Row>
-												 <Table.HeaderCell>Name</Table.HeaderCell>
-												 <Table.HeaderCell>Periods</Table.HeaderCell>
-													 <Table.HeaderCell>Remove</Table.HeaderCell>
-
-											 </Table.Row>
-										 </Table.Header>
-											 <Table.Body>
-
-																    	{self.state.zones[self.state.zonesActiveIndex].rooms.map((room) => {
-																    		return ([
-
-
-
-				 <Table.Row key={room._id}>
-				           <Table.Cell width={7}> <Form.Field>
-											<input placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
-										let newZones = self.state.zones
-												newZones.forEach((newZone) => {
-													if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
-														newZone.rooms.forEach((newRoom) => {
-															if (newRoom._id == room._id) {
-																newRoom.name = e.target.value
+		            	{Object.keys(options).map((key) => {
+		            		return (
+		            				<List.Item key={options[key].key}>
+								      <List.Content floated='right'>
+								      	{_.includes(this.state.currentRoom.periods, options[key].key)?
+								      		<Checkbox defaultChecked onChange={(e, result) => {
+								      			let newZones = this.state.zones;
+												newZones.forEach((zone, i) => {
+													if (zone._id == currentZone._id) {
+														zone.rooms.forEach((newRoom) => {
+															if (newRoom._id == this.state.currentRoom._id) {
+																if (result.checked) {
+																	if (!_.includes(newRoom.periods, options[key].key)) {
+																		newRoom.periods.push(options[key].key)
+																	}
+																} else {
+																	newRoom.periods = _.pull(newRoom.periods, options[key].key)
+																}
 															}
 														})
 													}
 												})
-										self.setState({
-											zones: newZones
-										})
-											}} />
+												this.setState({
+													zones: newZones
+												})
+								      		}} />
+								      		:
+								      		<Checkbox onChange={(e, result) => {
+								      			let newZones = this.state.zones;
+												newZones.forEach((zone, i) => {
+													if (zone._id == currentZone._id) {
+														zone.rooms.forEach((newRoom) => {
+															if (newRoom._id == this.state.currentRoom._id) {
+																if (result.checked) {
+																	if (!_.includes(newRoom.periods, options[key].key)) {
+																		newRoom.periods.push(options[key].key)
+																	}
+																} else {
+																	newRoom.periods = _.pull(newRoom.periods, options[key].key)
+																}
+															}
+														})
+													}
+												})
+												this.setState({
+													zones: newZones
+												})
+								      		}} />
+								      	}
+								      </List.Content>
+								      <List.Content>
+								        {options[key].text}
+								      </List.Content>
+								    </List.Item>
+		            			)
+		            	})}
+					  </List>
+		          </Modal.Content>
+		          <Modal.Actions>
+		            <Button color="blue" content='Close' onClick={this.modalClose.bind(this)} />
+		          </Modal.Actions>
+		        </Modal>
 
-										</Form.Field></Table.Cell>
-									<Table.Cell width={8}>	<Form.Field>
-
-												 <Dropdown key={room._id+'-periods'} name={room._id+'-periods'} placeholder='Periods' fluid multiple search selection options={options} value={room.periods} onChange={(e, i) => {
-											 let newZones = self.state.zones
-													 newZones.forEach((newZone) => {
-														 if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
-															 newZone.rooms.forEach((newRoom) => {
-																 if (newRoom._id == room._id) {
-																	 newRoom.periods = i.value
-																 }
-															 })
-														 }
-													 })
-											 self.setState({
-												 zones: newZones
-											 })
-												 }} />
-										 </Form.Field></Table.Cell>
-									 <Table.Cell width={1} textAlign={'center'}>
-
-										 <Button size="mini" icon='remove' color="red" onClick={(e) => {
-									 																			      	e.stopPropagation()
-									 																			      	let newZones = self.state.zones
-									 																			      	newZones.forEach((newZone) => {
-									 																			      		if (newZone._id == self.state.zones[self.state.zonesActiveIndex]._id) {
-									 																			      			newZone.rooms = newZone.rooms.filter((newRoom) => {
-									 																			      				return newRoom._id != room._id
-									 																			      			})
-									 																			      		}
-									 																			      	})
-									 																			      	self.setState({
-									 																			      		zones: newZones
-									 																			      	})
-									 																			      }} />
-
-
-
-									 </Table.Cell>
-				         </Table.Row>
-
-
-
-
-																    			])
-																    	})}
-
-																		</Table.Body>
-														 </Table>
-
-														 :
-														 null
-														 }
-
-
-
-
-
-
-
-
-														 </div>
-
-
-
-
-																	 </div>
-					])
-				}(this)
-			}
-		</Segment>
-
-
-		<br/><br/>
-
-	<h4>Map Issues</h4>
-
-
-
-
-
-
-		<h4>Rooms {FireAnalytics.zone.countRooms(this.state.zones)}</h4>
-
-<br></br>
-
-
-					  <Form.Field>
-					  	<Button type="submit" floated="right" primary>Save</Button>
-					  </Form.Field>
-
-				</Form>
 			</div>
 			)
 	}
@@ -355,16 +377,10 @@ class HiddenMakeSchool extends React.Component {
 
 const MakeSchool = connect(
 	(state) => {
-		return {
-			teachers: state.teachers
-		}
+		return {}
 	},
 	(dispatch) => {
-		return {
-			updateMap: (map) => {
-				dispatch(mapActions.updateMap(this.state.zones))
-			}
-		}
+		return {}
 	}
 	)(HiddenMakeSchool)
 
