@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Checkbox, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown, Input, List, Modal} from 'semantic-ui-react'
+import { Button, Checkbox, Loader, Form, Accordion, Icon, Table, Label, Menu, Message, Grid, Segment, Dropdown, Input, List, Modal} from 'semantic-ui-react'
 import * as _ from "lodash"
 import { connect } from "react-redux"
 import * as FireAnalytics from "FireAnalytics"
@@ -7,8 +7,6 @@ import * as FireAnalytics from "FireAnalytics"
 import { teacherActions, mapActions } from "../actions"
 
 import { http } from "../util"
-
-
 
 //temp variable for what a schools period setup would look like
 
@@ -45,61 +43,25 @@ const options = {
 	}
 }
 
-var initialZones = [
-	{
-		_id: "1",
-		name: "Zone a",
-		rooms: [
-			{
-				_id: "1",
-				name: "room 1",
-				periods: ["8fd0578c-86d8-45c6-a38c-3a2b3fe125fa", "db760346-801b-4cdc-adb4-4270db020e64"]
-			},
-			{
-				_id: "2",
-				name: "room 2",
-				periods: ["8fd0578c-86d8-45c6-a38c-3a2b3fe125fa", "db760346-801b-4cdc-adb4-4270db020e64"]
-			},
-			{
-				_id: "3",
-				name: "room 3",
-				periods: ["8fd0578c-86d8-45c6-a38c-3a2b3fe125fa", "db760346-801b-4cdc-adb4-4270db020e64"]
-			},
-		]
-	},
-	{
-		_id: "2",
-		name: "Zone b",
-		rooms: [
-			{
-				_id: "1",
-				name: "room 1",
-				periods: ["8fd0578c-86d8-45c6-a38c-3a2b3fe125fa", "db760346-801b-4cdc-adb4-4270db020e64"]
-			},
-			{
-				_id: "2",
-				name: "room 2",
-				periods: ["8fd0578c-86d8-45c6-a38c-3a2b3fe125fa", "db760346-801b-4cdc-adb4-4270db020e64"]
-			}
-		]
-	},
-	{
-		_id: "3",
-		name: "Zone c",
-		rooms: []
-	}
-]
-
-
 class HiddenMakeSchool extends React.Component {
 	constructor() {
 		super()
 		this.state = {
-			zones: initialZones,
+			zones: [],
 			activeZone: "1",
 			modalOpen: false,
-			currentRoom: {}
+			currentRoom: {},
+			loading: true
 		}
+	}
+	componentDidMount() {
+		http.get("/api/school/map").then((data) => {
+			this.setState({
+				zones: data.data.zones,
+				activeZone: data.data.zones[0]._id,
+				loading: false
+			});
+		})
 	}
 
 	generateUUID() {
@@ -109,7 +71,14 @@ class HiddenMakeSchool extends React.Component {
 	}
 
 	submit(e) {
-		console.log(this.state.zones)
+		e.preventDefault()
+		http.post("/api/school/map", {
+			map: this.state.zones
+		}).then(function(i){
+			console.log(i);
+			alert("The school was updated.")
+		})
+
 		e.preventDefault();
 	}
 
@@ -121,23 +90,53 @@ class HiddenMakeSchool extends React.Component {
 
 	render() {
 
+		if (this.state.loading) { //if loading inital zone data
+			return (
+					<div>
+						<Form>
+						<h2>School Map</h2>
+						<br />
+						<Loader active inline='centered' size='massive' />
+						</Form>
+					</div>
+				)
+		}
+
 		//gets currently selected zone
 		let currentZone = undefined;
+		let index = 0;
 		if (this.state.zones.length > 0) {
-			currentZone = _.find(this.state.zones, (zone) => {
+
+			index = _.findIndex(this.state.zones, (zone) => {
 				return zone._id == this.state.activeZone
-			}) || this.state.zones[0]
+			})
+
+			currentZone = this.state.zones[index] || this.state.zones[0]
 		}
 
 		return (
 			<div>
 				<Form onSubmit={this.submit.bind(this)}>
 					<h2>School Map</h2>
+					<h3>Total Rooms: {FireAnalytics.zone.countRooms(this.state.zones)}</h3>
+					{FireAnalytics.zone.mapIssues(this.state.zones).length > 0?
+					<div>
+						<h3>Errors:</h3>
+						<List bulleted>
+							{FireAnalytics.zone.mapIssues(this.state.zones).map((issue, i) => {
+								return (
+									<List.Item key={i}>
+										{issue}
+									</List.Item>
+								)
+							})}
+						</List>
+					</div>
+					:null}
 					<br/>
 
-					{this.state.zones.length > 0?
 					<Menu attached='top' tabular>
-					{this.state.zones.map((zone) => {
+					{this.state.zones.length > 0? this.state.zones.map((zone) => {
 						return (
 								<Menu.Item key={zone._id} active={zone._id == currentZone._id} onClick={() => {
 									this.setState({
@@ -161,7 +160,9 @@ class HiddenMakeSchool extends React.Component {
 									}} />
 								</Menu.Item>
 							)
-					})}
+					}):
+					null
+					}
 
 						<Menu.Menu position='right'>
 							<Menu.Item name='new-tab' onClick={() => {
@@ -182,7 +183,6 @@ class HiddenMakeSchool extends React.Component {
 						</Menu.Menu>
 
 					</Menu>
-					:null}
 
 					{this.state.zones.length > 0?
 					<Segment attached='bottom'>
@@ -191,11 +191,7 @@ class HiddenMakeSchool extends React.Component {
 								<label>Zone Name</label>
 								<input placeholder='Zone Name' name={currentZone._id} value={currentZone.name} onChange={(e) => {
 									let newZones = this.state.zones;
-									newZones.forEach((zone, i) => {
-										if (zone._id == currentZone._id) {
-											newZones[i].name = e.target.value
-										}
-									})
+									newZones[index].name = e.target.value
 									this.setState({
 										zones: newZones
 									})
@@ -209,17 +205,13 @@ class HiddenMakeSchool extends React.Component {
 							<Form.Field>
 								<Button type="button" content='Add room' icon='plus' labelPosition='left' onClick={() => {
 									let newZones = this.state.zones;
-									newZones.forEach((zone, i) => {
-										if (zone._id == currentZone._id) {
-											newZones[i].rooms.push({
-												_id: this.generateUUID(),
-												name: "New Room",
-												periods: []
-											});
-											this.setState({
-												zones: newZones
-											})
-										}
+									newZones[index].rooms.push({
+										_id: this.generateUUID(),
+										name: "New Room",
+										periods: []
+									});
+									this.setState({
+										zones: newZones
 									})
 								}} />
 							</Form.Field>
@@ -235,22 +227,14 @@ class HiddenMakeSchool extends React.Component {
 								</Table.Header>
 								
 								<Table.Body>
-									{currentZone.rooms.map((room) => {
+									{currentZone.rooms.map((room, i) => {
 										return (
 											<Table.Row key={room._id}>
 												<Table.Cell>
-													<input placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
+													<input data-key={i} placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
 														let newZones = this.state.zones;
-														newZones.forEach((zone, i) => {
-															if (zone._id == currentZone._id) {
-																zone.rooms.forEach((newRoom) => {
-																	if (newRoom._id == room._id) {
-																		newRoom.name = e.target.value
-																	}
-																})
-
-															}
-														})
+														let roomIndex = e.target.getAttribute("data-key");
+														newZones[index].rooms[roomIndex].name = e.target.value
 														this.setState({
 															zones: newZones
 														})
@@ -278,13 +262,9 @@ class HiddenMakeSchool extends React.Component {
 												<Table.Cell>
 													<Button type="button" size="mini" icon='remove' color="red" onClick={(e) => {
 							 							let newZones = this.state.zones
-							 							newZones.forEach((newZone) => {
-								 							if (newZone._id == currentZone._id) {
-									 							newZone.rooms = newZone.rooms.filter((newRoom) => {
-									 								return newRoom._id != room._id
-									 							})
-									 						}
-								 						})
+							 							newZones[index].rooms = newZones[index].rooms.filter((newRoom) => {
+									 						return newRoom._id != room._id
+									 					})
 							 							this.setState({
 							 								zones: newZones
 							 							})
@@ -316,12 +296,12 @@ class HiddenMakeSchool extends React.Component {
 					</Form.Field>
 					}
 
-					<Button primary type="submit" floated="right" onClick={this.submit.bind(this)}>Submit</Button>
+					<Button primary type="submit" floated="right" style={{marginBottom: "20px !important"}} onClick={this.submit.bind(this)}>Submit</Button>
 				</Form>
 
 				<Modal size="small" open={this.state.modalOpen} onClose={this.modalClose.bind(this)}>
 		          <Modal.Header>
-		            Update periods
+		            Update periods: {this.state.currentRoom.name}
 		          </Modal.Header>
 		          <Modal.Content>
 		            <List divided verticalAlign='middle'>
@@ -385,7 +365,7 @@ class HiddenMakeSchool extends React.Component {
 					  </List>
 		          </Modal.Content>
 		          <Modal.Actions>
-		            <Button color="blue" icon='checkmark' labelPosition='right' content='Close' onClick={this.modalClose.bind(this)} />
+		            <Button color="blue" content='Close' onClick={this.modalClose.bind(this)} />
 		          </Modal.Actions>
 		        </Modal>
 
