@@ -3,6 +3,8 @@ import { Button, Checkbox, Loader, Form, Accordion, Icon, Table, Label, Menu, Me
 import * as _ from "lodash"
 import { connect } from "react-redux"
 import * as FireAnalytics from "FireAnalytics"
+import Select from 'react-select';
+import DebounceInput from 'react-debounce-input';
 
 import { teacherActions, mapActions } from "../actions"
 
@@ -10,47 +12,40 @@ import { http } from "../util"
 
 //temp variable for what a schools period setup would look like
 
-const options = {
-	"ac357dee-6f09-4465-8c5f-5c8ecd214c84": {
+const options = [
+	{
 		value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
-		key: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
-		text: "period 1"
+		label: "period 1"
 	},
-	"37d07ef8-b352-4cf5-8895-02e76f466420": {
+	{
 		value: "37d07ef8-b352-4cf5-8895-02e76f466420",
-		key: "37d07ef8-b352-4cf5-8895-02e76f466420",
-		text: "period 2"
+		label: "period 2"
 	},
-	"aa1a0136-d2c0-44b3-aa17-a182e2bc3853": {
+	{
 		value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
-		key: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
-		text: "period 3"
+		label: "period 3"
 	},
-	"47dbb06f-c624-4a5a-bc71-37900c8d611b": {
+	{
 		value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
-		key: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
-		text: "period 4"
+		label: "period 4"
 	},
-	"8fd0578c-86d8-45c6-a38c-3a2b3fe125fa": {
+	{
 		value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
-		key: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
-		text: "period 5"
+		label: "period 5"
 	},
-	"db760346-801b-4cdc-adb4-4270db020e64": {
+	{
 		value: "db760346-801b-4cdc-adb4-4270db020e64",
-		key: "db760346-801b-4cdc-adb4-4270db020e64",
-		text: "period 6"
+		label: "period 6"
 	}
-}
+]
 
 class HiddenMakeSchool extends React.Component {
 	constructor() {
 		super()
 		this.state = {
 			zones: [],
-			activeZone: "1",
-			modalOpen: false,
-			currentRoom: {},
+			activeZone: "",
+			activeZoneIndex: 0,
 			loading: true
 		}
 	}
@@ -82,12 +77,6 @@ class HiddenMakeSchool extends React.Component {
 		e.preventDefault();
 	}
 
-	modalClose() {
-		this.setState({
-			modalOpen: false
-		})
-	}
-
 	render() {
 
 		if (this.state.loading) { //if loading inital zone data
@@ -107,9 +96,7 @@ class HiddenMakeSchool extends React.Component {
 		let index = 0;
 		if (this.state.zones.length > 0) {
 
-			index = _.findIndex(this.state.zones, (zone) => {
-				return zone._id == this.state.activeZone
-			})
+			index = this.state.activeZoneIndex
 
 			currentZone = this.state.zones[index] || this.state.zones[0]
 		}
@@ -136,11 +123,12 @@ class HiddenMakeSchool extends React.Component {
 					<br/>
 
 					<Menu attached='top' tabular>
-					{this.state.zones.length > 0? this.state.zones.map((zone) => {
+					{this.state.zones.length > 0? this.state.zones.map((zone, i) => {
 						return (
 								<Menu.Item key={zone._id} active={zone._id == currentZone._id} onClick={() => {
 									this.setState({
-										activeZone: zone._id
+										activeZone: zone._id,
+										activeZoneIndex: i
 									})
 								}}>
 									{zone.name}
@@ -189,13 +177,19 @@ class HiddenMakeSchool extends React.Component {
 						<div>
 							<Form.Field>
 								<label>Zone Name</label>
-								<input placeholder='Zone Name' name={currentZone._id} value={currentZone.name} onChange={(e) => {
-									let newZones = this.state.zones;
-									newZones[index].name = e.target.value
-									this.setState({
-										zones: newZones
-									})
-								}} />
+								<DebounceInput
+									minLength={2}
+									debounceTimeout={10}
+									placeholder='Zone Name'
+									name={currentZone._id}
+									value={currentZone.name}
+									onChange={(e) => {
+										let newZones = this.state.zones;
+										newZones[index].name = e.target.value
+										this.setState({
+											zones: newZones
+										})
+									}} />
 							</Form.Field>
 
 							<Form.Field>
@@ -231,33 +225,37 @@ class HiddenMakeSchool extends React.Component {
 										return (
 											<Table.Row key={room._id}>
 												<Table.Cell>
-													<input data-key={i} placeholder='Room Name' name={"roomname" + room._id} value={room.name} onChange={(e) => {
-														let newZones = this.state.zones;
-														let roomIndex = e.target.getAttribute("data-key");
-														newZones[index].rooms[roomIndex].name = e.target.value
-														this.setState({
-															zones: newZones
-														})
-													}} />
+													<DebounceInput
+														minLength={2}
+														debounceTimeout={300}
+														data-key={i}
+														placeholder='Room Name'
+														name={"roomname" + room._id}
+														value={room.name}
+														onChange={(e) => {
+															let newZones = this.state.zones;
+															let roomIndex = e.target.getAttribute("data-key");
+															newZones[index].rooms[roomIndex].name = e.target.value
+															this.setState({
+																zones: newZones
+															})
+														}} />
 												</Table.Cell>
 												<Table.Cell>
-													{room.periods.length > 0? room.periods.map((period) => {
-														return (
-															<Label key={options[period].key}>
-														        {options[period].text}
-														    </Label>
-															)
-													})
-
-													:
-														<span>There are no periods selected.</span>
-													}
-													<Button type="button" size="mini" className="addButton" icon='write' color="blue" floated="right" onClick={() => {
-														this.setState({
-															currentRoom: room,
-															modalOpen: true
-														})
-													}} />
+													<Select
+														simpleValue={true}
+														value={room.periods}
+														inputProps={ { type: 'react-type' } }
+														options={options}
+														multi={true}
+														onChange={(e) => {
+															let newZones = this.state.zones
+															newZones[index].rooms[i].periods = e.split(",")
+															this.setState({
+																zone: newZones
+															})
+														 }}
+													 />
 												</Table.Cell>
 												<Table.Cell>
 													<Button type="button" size="mini" icon='remove' color="red" onClick={(e) => {
@@ -298,77 +296,6 @@ class HiddenMakeSchool extends React.Component {
 
 					<Button primary type="submit" floated="right" style={{marginBottom: "20px !important"}} onClick={this.submit.bind(this)}>Submit</Button>
 				</Form>
-
-				<Modal size="small" open={this.state.modalOpen} onClose={this.modalClose.bind(this)}>
-		          <Modal.Header>
-		            Update periods: {this.state.currentRoom.name}
-		          </Modal.Header>
-		          <Modal.Content>
-		            <List divided verticalAlign='middle'>
-
-		            	{Object.keys(options).map((key) => {
-		            		return (
-		            				<List.Item key={options[key].key}>
-								      <List.Content floated='right'>
-								      	{_.includes(this.state.currentRoom.periods, options[key].key)?
-								      		<Checkbox defaultChecked onChange={(e, result) => {
-								      			let newZones = this.state.zones;
-												newZones.forEach((zone, i) => {
-													if (zone._id == currentZone._id) {
-														zone.rooms.forEach((newRoom) => {
-															if (newRoom._id == this.state.currentRoom._id) {
-																if (result.checked) {
-																	if (!_.includes(newRoom.periods, options[key].key)) {
-																		newRoom.periods.push(options[key].key)
-																	}
-																} else {
-																	newRoom.periods = _.pull(newRoom.periods, options[key].key)
-																}
-															}
-														})
-													}
-												})
-												this.setState({
-													zones: newZones
-												})
-								      		}} />
-								      		:
-								      		<Checkbox onChange={(e, result) => {
-								      			let newZones = this.state.zones;
-												newZones.forEach((zone, i) => {
-													if (zone._id == currentZone._id) {
-														zone.rooms.forEach((newRoom) => {
-															if (newRoom._id == this.state.currentRoom._id) {
-																if (result.checked) {
-																	if (!_.includes(newRoom.periods, options[key].key)) {
-																		newRoom.periods.push(options[key].key)
-																	}
-																} else {
-																	newRoom.periods = _.pull(newRoom.periods, options[key].key)
-																}
-															}
-														})
-													}
-												})
-												this.setState({
-													zones: newZones
-												})
-								      		}} />
-								      	}
-								      </List.Content>
-								      <List.Content>
-								        {options[key].text}
-								      </List.Content>
-								    </List.Item>
-		            			)
-		            	})}
-					  </List>
-		          </Modal.Content>
-		          <Modal.Actions>
-		            <Button color="blue" content='Close' onClick={this.modalClose.bind(this)} />
-		          </Modal.Actions>
-		        </Modal>
-
 			</div>
 			)
 	}
