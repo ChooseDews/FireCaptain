@@ -46,7 +46,8 @@ class HiddenMakeSchool extends React.Component {
 			zones: [],
 			activeZone: "",
 			activeZoneIndex: 0,
-			loading: true
+			loading: true,
+			zonesRoomName: []
 		}
 	}
 	componentDidMount() {
@@ -192,12 +193,30 @@ class HiddenMakeSchool extends React.Component {
 									}} />
 							</Form.Field>
 
-							<Form.Field>
-								<label>Rooms</label>
-							</Form.Field>
+							<h3>Add Room</h3>
+
+							<div className="field">
+							    <div className="two fields">
+							      <div className="field">
+							      	<label>Name</label>
+							        <Form.Input name='roomName' placeholder='Name' />
+							      </div>
+							      <div className="field">
+							      	<label>Periods</label>
+							        <Select
+							        	id="roomPeriods"
+										simpleValue={true}
+										value={[]}
+										inputProps={ { type: 'react-type' } }
+										options={options}
+										multi={true}
+									/>
+							      </div>
+							    </div>
+							  </div>
 
 							<Form.Field>
-								<Button type="button" content='Add room' icon='plus' labelPosition='left' onClick={() => {
+								<Button type="button" color="blue" content='Add room' icon='plus' labelPosition='left' floated="right" onClick={() => {
 									let newZones = this.state.zones;
 									newZones[index].rooms.push({
 										_id: this.generateUUID(),
@@ -208,6 +227,10 @@ class HiddenMakeSchool extends React.Component {
 										zones: newZones
 									})
 								}} />
+							</Form.Field>
+
+							<Form.Field>
+								<label>Rooms</label>
 							</Form.Field>
 
 							{currentZone.rooms.length > 0?
