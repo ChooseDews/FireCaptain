@@ -39,6 +39,8 @@ const options = [
 	}
 ]
 
+const roomsPerPage = 7;
+
 class HiddenMakeSchool extends React.Component {
 	constructor() {
 		super()
@@ -47,7 +49,11 @@ class HiddenMakeSchool extends React.Component {
 			activeZone: "",
 			activeZoneIndex: 0,
 			loading: true,
-			zonesRoomName: []
+			roomName: {},
+			roomPeriods: {},
+			search: {},
+			searchLoading: {},
+			pagination: {}
 		}
 	}
 	componentDidMount() {
@@ -101,6 +107,20 @@ class HiddenMakeSchool extends React.Component {
 
 			currentZone = this.state.zones[index] || this.state.zones[0]
 		}
+
+		let listOfRooms = _.filter(currentZone.rooms, (room) => {
+			let name = room.name || ""
+			name = name.toUpperCase()
+			let search = this.state.search[index] || ""
+			return name.includes(search.toUpperCase())
+		})
+
+		let page = (this.state.pagination[index] || 0) * roomsPerPage
+		let endPage = page + roomsPerPage
+		if (endPage > listOfRooms.length) {
+			endPage = listOfRooms.length
+		}
+		let displayedRooms = listOfRooms.slice(page, endPage)
 
 		return (
 			<div>
@@ -176,6 +196,9 @@ class HiddenMakeSchool extends React.Component {
 					{this.state.zones.length > 0?
 					<Segment attached='bottom'>
 						<div>
+
+							<h3>Zone Information</h3>
+
 							<Form.Field>
 								<label>Zone Name</label>
 								<DebounceInput
@@ -196,35 +219,53 @@ class HiddenMakeSchool extends React.Component {
 							<h3>Add Room</h3>
 
 							<div className="field">
-							    <div className="two fields">
-							      <div className="field">
-							      	<label>Name</label>
-							        <Form.Input name='roomName' placeholder='Name' />
-							      </div>
-							      <div className="field">
-							      	<label>Periods</label>
-							        <Select
-							        	id="roomPeriods"
+									<div className="two fields">
+										<div className="field">
+											<label>Name</label>
+											<DebounceInput minLength={2} debounceTimeout={300} name='roomName' value={this.state.roomName[index] || ""} placeholder='Name' onChange={(e) => {
+												let newRoomName = this.state.roomName
+												newRoomName[index] = e.target.value
+												this.setState({
+													roomName: newRoomName
+												})
+											}} />
+										</div>
+										<div className="field">
+											<label>Periods</label>
+											<Select
 										simpleValue={true}
-										value={[]}
+										value={this.state.roomPeriods[index]}
 										inputProps={ { type: 'react-type' } }
 										options={options}
 										multi={true}
+										onChange={(e) => {
+											let newRoomPeriods = this.state.roomPeriods
+											newRoomPeriods[index] = e.split(",")
+											this.setState({
+												roomPeriods: newRoomPeriods
+											})
+										}}
 									/>
-							      </div>
-							    </div>
-							  </div>
+										</div>
+									</div>
+								</div>
 
 							<Form.Field>
 								<Button type="button" color="blue" content='Add room' icon='plus' labelPosition='left' floated="right" onClick={() => {
 									let newZones = this.state.zones;
 									newZones[index].rooms.push({
 										_id: this.generateUUID(),
-										name: "New Room",
-										periods: []
+										name: this.state.roomName[index],
+										periods: this.state.roomPeriods[index]
 									});
+									let newRoomPeriods = this.state.roomPeriods
+									newRoomPeriods[index] = []
+									let newRoomName = this.state.roomName
+									newRoomName[index] = ""
 									this.setState({
-										zones: newZones
+										zones: newZones,
+										roomPeriods: newRoomPeriods,
+										roomName: newRoomName
 									})
 								}} />
 							</Form.Field>
@@ -234,68 +275,152 @@ class HiddenMakeSchool extends React.Component {
 							</Form.Field>
 
 							{currentZone.rooms.length > 0?
-							<Table celled>
-								<Table.Header>
-									<Table.Row>
-										<Table.HeaderCell>Name</Table.HeaderCell>
-										<Table.HeaderCell>Periods</Table.HeaderCell>
-										<Table.HeaderCell>Remove</Table.HeaderCell>
-									 </Table.Row>
-								</Table.Header>
+							<div>
 								
-								<Table.Body>
-									{currentZone.rooms.map((room, i) => {
-										return (
-											<Table.Row key={room._id}>
+								<Input icon='search' loading={this.state.searchLoading[index] || false} value={this.state.search[index] || ""} placeholder='Search...' onChange={(e) => {
+									let value = e.target.value
+									let newSearch = this.state.search
+									newSearch[index] = value
+									let newSearchLoading = this.state.searchLoading
+									newSearchLoading[index] = true
+									this.setState({
+										search: newSearch,
+										searchLoading: newSearchLoading
+									})
+									setTimeout(() => {
+										let newSearchLoading = this.state.searchLoading
+										newSearchLoading[index] = false
+										this.setState({
+											searchLoading: newSearchLoading
+										})
+									}, 250)
+								}} />
+
+								<Table celled>
+									<Table.Header>
+										<Table.Row>
+											<Table.HeaderCell>Name</Table.HeaderCell>
+											<Table.HeaderCell>Periods</Table.HeaderCell>
+											<Table.HeaderCell>Remove</Table.HeaderCell>
+										 </Table.Row>
+									</Table.Header>
+									
+									<Table.Body>
+
+										{listOfRooms.length > 0? displayedRooms.map((room, i) => {
+											return (
+												<Table.Row key={room._id}>
+													<Table.Cell>
+														<DebounceInput
+															minLength={2}
+															debounceTimeout={300}
+															data-key={i + ((this.state.pagination[index] || 0) * roomsPerPage)}
+															placeholder='Room Name'
+															name={"roomname" + room._id}
+															value={room.name}
+															onChange={(e) => {
+																let newZones = this.state.zones;
+																let roomIndex = e.target.getAttribute("data-key");
+																newZones[index].rooms[roomIndex].name = e.target.value
+																this.setState({
+																	zones: newZones
+																})
+															}} />
+													</Table.Cell>
+													<Table.Cell>
+														<Select
+															simpleValue={true}
+															value={room.periods}
+															inputProps={ { type: 'react-type' } }
+															options={options}
+															multi={true}
+															onChange={(e) => {
+																let newZones = this.state.zones
+																newZones[index].rooms[i + ((this.state.pagination[index] || 0) * roomsPerPage)].periods = e.split(",")
+																this.setState({
+																	zone: newZones
+																})
+															 }}
+														 />
+													</Table.Cell>
+													<Table.Cell>
+														<Button type="button" size="mini" icon='remove' color="red" onClick={(e) => {
+								 							let newZones = this.state.zones
+								 							newZones[index].rooms = newZones[index].rooms.filter((newRoom) => {
+										 						return newRoom._id != room._id
+										 					})
+								 							this.setState({
+								 								zones: newZones
+								 							})
+										 				}} />
+													</Table.Cell>
+												</Table.Row>
+												)
+										}):
+											<Table.Row>
 												<Table.Cell>
-													<DebounceInput
-														minLength={2}
-														debounceTimeout={300}
-														data-key={i}
-														placeholder='Room Name'
-														name={"roomname" + room._id}
-														value={room.name}
-														onChange={(e) => {
-															let newZones = this.state.zones;
-															let roomIndex = e.target.getAttribute("data-key");
-															newZones[index].rooms[roomIndex].name = e.target.value
-															this.setState({
-																zones: newZones
-															})
-														}} />
-												</Table.Cell>
-												<Table.Cell>
-													<Select
-														simpleValue={true}
-														value={room.periods}
-														inputProps={ { type: 'react-type' } }
-														options={options}
-														multi={true}
-														onChange={(e) => {
-															let newZones = this.state.zones
-															newZones[index].rooms[i].periods = e.split(",")
-															this.setState({
-																zone: newZones
-															})
-														 }}
-													 />
-												</Table.Cell>
-												<Table.Cell>
-													<Button type="button" size="mini" icon='remove' color="red" onClick={(e) => {
-							 							let newZones = this.state.zones
-							 							newZones[index].rooms = newZones[index].rooms.filter((newRoom) => {
-									 						return newRoom._id != room._id
-									 					})
-							 							this.setState({
-							 								zones: newZones
-							 							})
-									 				}} />
+													<p>No results found</p>
 												</Table.Cell>
 											</Table.Row>
-											)
-									})}
-								</Table.Body>
-							</Table>
+										}
+									</Table.Body>
+
+									<Table.Footer>
+										<Table.Row>
+											<Table.HeaderCell colSpan='3'>
+												<Menu floated='right' pagination>
+													<Menu.Item as='a' className={(this.state.pagination[index] || 0) <= 0?"disabled":""} icon onClick={() => {
+														let page = this.state.pagination[index] || 0
+														if (page <= 0) {
+															return;
+														}
+														let newPagination = this.state.pagination
+														if (newPagination[index]) {
+															newPagination[index] -= 1
+														} else {
+															newPagination[index] = -1
+														}
+														this.setState({
+															pagination: newPagination
+														})
+													}}>
+														<Icon name='left chevron' />
+													</Menu.Item>
+													{[...Array(Math.ceil(listOfRooms.length/roomsPerPage))].map((room, i) => {
+														return (
+															<Menu.Item as='a' className={i == (this.state.pagination[index] || 0)?"active":""} key={i} onClick={() => {
+																let newPagination = this.state.pagination
+																newPagination[index] = i
+																this.setState({
+																	pagination: newPagination
+																})
+															}}>{i+1}</Menu.Item>
+															)
+													})}
+													<Menu.Item as='a' icon className={(this.state.pagination[index] || 0) >= Math.ceil(listOfRooms.length/roomsPerPage) - 1?"disabled":""} onClick={() => {
+														let page = this.state.pagination[index] || 0
+														if (page >= Math.ceil(listOfRooms.length/roomsPerPage) - 1) {
+															return;
+														}
+														let newPagination = this.state.pagination
+														if (newPagination[index]) {
+															newPagination[index] += 1
+														} else {
+															newPagination[index] = 1
+														}
+														this.setState({
+															pagination: newPagination
+														})
+													}}>
+														<Icon name='right chevron' />
+													</Menu.Item>
+												</Menu>
+											</Table.HeaderCell>
+										</Table.Row>
+									</Table.Footer>
+
+								</Table>
+							</div>
 							:
 							<Form.Field>
 								<Message info>
