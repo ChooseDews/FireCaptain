@@ -289,9 +289,13 @@ class HiddenMakeSchool extends React.Component {
 									})
 									setTimeout(() => {
 										let newSearchLoading = this.state.searchLoading
-										newSearchLoading[index] = false
+										let newPagination = this.state.pagination;
+										newPagination[index] = 0;
+										newSearchLoading[index] = false;
 										this.setState({
-											searchLoading: newSearchLoading
+											searchLoading: newSearchLoading,
+											pagination: newPagination
+											
 										})
 									}, 250)
 								}} />
