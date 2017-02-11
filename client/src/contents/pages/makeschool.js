@@ -15,27 +15,27 @@ import { http } from "../util"
 const options = [
 	{
 		value: "ac357dee-6f09-4465-8c5f-5c8ecd214c84",
-		label: "period 1"
+		text: "period 1"
 	},
 	{
 		value: "37d07ef8-b352-4cf5-8895-02e76f466420",
-		label: "period 2"
+		text: "period 2"
 	},
 	{
 		value: "aa1a0136-d2c0-44b3-aa17-a182e2bc3853",
-		label: "period 3"
+		text: "period 3"
 	},
 	{
 		value: "47dbb06f-c624-4a5a-bc71-37900c8d611b",
-		label: "period 4"
+		text: "period 4"
 	},
 	{
 		value: "8fd0578c-86d8-45c6-a38c-3a2b3fe125fa",
-		label: "period 5"
+		text: "period 5"
 	},
 	{
 		value: "db760346-801b-4cdc-adb4-4270db020e64",
-		label: "period 6"
+		text: "period 6"
 	}
 ]
 
@@ -233,6 +233,7 @@ class HiddenMakeSchool extends React.Component {
 										<div className="field">
 											<label>Periods</label>
 											<Select
+										labelKey="text"
 										simpleValue={true}
 										value={this.state.roomPeriods[index]}
 										inputProps={ { type: 'react-type' } }
@@ -333,6 +334,7 @@ class HiddenMakeSchool extends React.Component {
 													</Table.Cell>
 													<Table.Cell>
 														<Select
+															labelKey="text"
 															simpleValue={true}
 															value={room.periods}
 															inputProps={ { type: 'react-type' } }

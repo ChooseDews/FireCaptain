@@ -20,7 +20,8 @@ import {
 	Unauthorized,
 	ErrorPage,
 	School,
-	MakeSchool
+	MakeSchool,
+	ScheduleDrill
 } from "./pages"
 
 
@@ -32,6 +33,7 @@ const routes = (
 	    <Route path="/schools" component={IsDistrict(Schools)} />
 		<Route path="/school" component={IsDistrict(School)} />
 		<Route path="/makeschool" component={MakeSchool} />
+		<Route path="/scheduledrill" component={ScheduleDrill} />
 	  </Route>
 
 	  <Route path="/login" component={IsNotLoggedIn(Login)} />
