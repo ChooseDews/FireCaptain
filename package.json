@@ -87,6 +87,7 @@
     "react-flatpickr": "^3.0.1",
     "react-flip-move": "^2.7.2",
     "react-moment": "0.0.3",
+    "react-notification": "^6.6.0",
     "react-redux": "^4.4.6",
     "react-responsive": "^1.2.5",
     "react-router": "^2.0.0",

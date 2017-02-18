@@ -2,6 +2,7 @@ import React from "react"
 import { Form, Button, Select } from "semantic-ui-react"
 import { connect } from "react-redux"
 import Flatpickr from 'react-flatpickr'
+import { ErrorMessage } from "../components"
 
 const options = [
 	{
@@ -37,13 +38,29 @@ class HiddenScheduleDrill extends React.Component {
 		this.state = {
 			date: undefined,
 			period: "",
-			details: ""
+			details: "",
+			errors: []
 		}
 	}
 
 	submit(e) {
-		console.log(this.state)
 		e.preventDefault()
+		let errors = []
+		if (!this.state.date) {
+			errors.push("Please pick a date")
+		}
+		if (!this.state.period) {
+			errors.push("Please pick a period")
+		}
+		if (errors.length > 0) {
+			this.setState({errors})
+			return;
+		} else {
+			alert("ur doing it")
+			this.setState({
+				errors: []
+			})
+		}
 	}
 
 	render() {
@@ -86,7 +103,10 @@ class HiddenScheduleDrill extends React.Component {
 							details: result.value
 						})
 					}} />
-					<Button type='submit'>Submit</Button>
+
+					<ErrorMessage errors={this.state.errors} />
+
+					<Button primary floated='right' type='submit'>Submit</Button>
 				</Form>
 			</div>
 		)
